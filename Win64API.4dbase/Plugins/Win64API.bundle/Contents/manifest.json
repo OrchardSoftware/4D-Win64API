@@ -1,0 +1,11 @@
+﻿{
+  "name": "Win64API",
+  "id": 15000,
+  "commands": [
+    {
+      "theme": "Win64API Commands",
+      "syntax": "sys_GetRegEnumKeyName(&L;&T;&Y):L",
+      "preemptive": true
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <group id="17" restype="x-4DK#">
+    <trans-unit id="18">
+      <source>WINAPI_GetRegistry</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="19">
+      <source>GR_HKEY_CLASSES_ROOT</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="20">
+      <source>GR_HKEY_CURRENT_USER</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="21">
+      <source>GR_HKEY_DYN_DATA</source>
+    </trans-unit>
+    <trans-unit d4:value="4" id="22">
+      <source>GR_HKEY_LOCAL_MACHINE</source>
+    </trans-unit>
+    <trans-unit d4:value="5" id="23">
+      <source>GR_HKEY_USERS</source>
+    </trans-unit>
+    <trans-unit d4:value="6" id="24">
+      <source>GR_HKEY_CURRENT_CONFIG</source>
+    </trans-unit>
+    <trans-unit d4:value="7" id="25">
+      <source>GR_HKEY_PERFORMANCE_DATA</source>
+    </trans-unit>
+  </group>
+
+</xliff>
