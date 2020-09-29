@@ -3,4 +3,7 @@
 Win64API.4dbase/userPreferences.*/*
 *.VC.opendb
 *.VC.db
-x64/*
+x64/*.*
+x64/Debug/*.*
+x64/Release/*.*
+

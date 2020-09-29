@@ -227,6 +227,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="4D Plugin API\4DPluginAPI.c" />
+    <ClCompile Include="Registry.cpp" />
     <ClCompile Include="Win64API.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +237,7 @@
     <ClInclude Include="4D Plugin API\PrivateTypes.h" />
     <ClInclude Include="4D Plugin API\PublicTypes.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="Registry.h" />
     <ClInclude Include="Win64API.h" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
       <Filter>SDK</Filter>
     </ClCompile>
     <ClCompile Include="Win64API.cpp" />
+    <ClCompile Include="Registry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="4D Plugin API\4DPluginAPI.h">
@@ -24,6 +25,7 @@
     </ClInclude>
     <ClInclude Include="Win64API.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="Registry.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="4D Plugin API\4DPluginAPI.def">
