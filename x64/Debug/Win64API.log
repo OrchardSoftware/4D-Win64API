@@ -1,0 +1,9 @@
+﻿  4DPluginAPI.c
+4D Plugin API\4DPluginAPI.c(8091): warning C4244: '=': conversion from 'sLONG_PTR' to 'PA_long32', possible loss of data
+4D Plugin API\4DPluginAPI.c(9112): warning C4018: '<': signed/unsigned mismatch
+4D Plugin API\4DPluginAPI.c(9162): warning C4018: '<': signed/unsigned mismatch
+  Win64API.cpp
+  LINK : C:\Users\dwaddell\OneDrive - Orchard Software Corporation\Documents\GitHub\4D-Win64API\Win64API.4dbase\plugins\Win64API.bundle\contents\windows64\Win64API.4DX not found or not built by the last incremental link; performing full link
+     Creating library Win64API.4dbase\Plugins\Win64API.bundle\Contents\Windows64\Win64API.lib and object Win64API.4dbase\Plugins\Win64API.bundle\Contents\Windows64\Win64API.exp
+  Win64API.vcxproj -> C:\Users\dwaddell\OneDrive - Orchard Software Corporation\Documents\GitHub\4D-Win64API\Win64API.4dbase\Plugins\Win64API.bundle\Contents\Windows64\Win64API.4DX
+  Win64API.vcxproj -> Win64API.4dbase\Plugins\Win64API.bundle\Contents\Windows64\Win64API.pdb (Full PDB)
