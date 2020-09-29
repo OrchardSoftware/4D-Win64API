@@ -20,7 +20,7 @@
 HKEY util_getRegRoot(LONG lKey);
 
 const char* const win32Commands[] = {
-	"sys_GetRegEnumKeyName"
+	"sys_GetRegEnum"
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -36,7 +36,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case 1:
-			sys_GetRegEnumKeyName(params);
+			sys_GetRegEnum(params);
 			break;
 	}	
 }
@@ -51,32 +51,33 @@ void DeinitPlugin()
 	// write deinitialisation code here...
 }
 
-void sys_GetRegEnumKeyName(PA_PluginParameters params)
+void sys_GetRegEnum(PA_PluginParameters params)
 {
 	DWORD dwSubKeys, i, j;
 	DWORD dwMaxSubKeyLength = MAX_KEY_LENGTH;
 	HKEY hRootKey, hOpenKey;
-	LONG lRootKey, lReturnValue, lRetErr;
+	REGSAM regSamFlag;
+	WCHAR wcSubKeyName[MAX_KEY_LENGTH];
+
+	PA_long32 lRootKey, lReturnValue;
 	PA_Unistring paSubKeyName;
 	PA_Unistring* paSubKeyNames;
 	PA_Variable paReturnKeyNamesArray;
-	WCHAR wcSubKeyName[MAX_KEY_LENGTH];
 
 	// Get the parameters
 	lRootKey = PA_GetLongParameter(params, 1);
 	paSubKeyNames = PA_GetStringParameter(params, 2);
 	paReturnKeyNamesArray = PA_GetVariableParameter(params, 3);
 
-	int iSamFlag = KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY;
+	regSamFlag = KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY;
 
 	lReturnValue = 0;
 	dwSubKeys = 0;
 	hRootKey = hOpenKey = 0;
-	lRetErr = 0;
 
 	hRootKey = util_getRegRoot(lRootKey);
 
-	if (RegOpenKeyEx(hRootKey, (LPCWSTR)paSubKeyNames->fString, 0, iSamFlag, &hOpenKey) == ERROR_SUCCESS)
+	if (RegOpenKeyEx(hRootKey, (LPCWSTR)paSubKeyNames->fString, 0, regSamFlag, &hOpenKey) == ERROR_SUCCESS)
 	{
 		if (RegQueryInfoKey(hOpenKey, NULL, NULL, NULL, &dwSubKeys, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
 		{
@@ -108,7 +109,7 @@ void sys_GetRegEnumKeyName(PA_PluginParameters params)
 	PA_ReturnLong(params, lReturnValue);
 }
 
-HKEY util_getRegRoot(LONG lKey) {
+HKEY util_getRegRoot(PA_long32 lKey) {
 	HKEY hReturnKey = 0;
 
 	switch (lKey) {

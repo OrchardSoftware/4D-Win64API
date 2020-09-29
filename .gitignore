@@ -1,3 +1,6 @@
 
 .vs/*
 Win64API.4dbase/userPreferences.*/*
+*.VC.opendb
+*.VC.db
+x64/*

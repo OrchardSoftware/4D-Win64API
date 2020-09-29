@@ -14,4 +14,4 @@
 void InitPlugin();
 void DeinitPlugin();
 
-void sys_GetRegEnumKeyName(PA_PluginParameters params);
+void sys_GetRegEnum(PA_PluginParameters params);
