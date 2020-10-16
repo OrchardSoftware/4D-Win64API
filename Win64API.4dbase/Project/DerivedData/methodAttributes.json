@@ -1,7 +1,16 @@
 ﻿{
 	"methods": {
+		"Compiler_Methods": {
+			"timeStamp": "2020-10-16T16:12:52.460Z"
+		},
 		"Win64API_main": {
-			"timeStamp": "2020-09-28T17:29:04.474Z"
+			"timeStamp": "2020-10-16T16:12:37.171Z"
+		},
+		"win_71": {
+			"timeStamp": "2020-10-16T16:12:12.647Z"
+		},
+		"win_80": {
+			"timeStamp": "2020-10-16T16:07:53.622Z"
 		}
 	}
 }

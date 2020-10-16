@@ -4,7 +4,12 @@
   "commands": [
     {
       "theme": "Win64API Commands",
-      "syntax": "sys_GetRegEnum(&L;&T;&Y):L",
+      "syntax": "sys_GetRegEnum(&L;&T;&Y;&L):L",
+      "preemptive": true
+    },
+    {
+      "theme": "Win64API Commands",
+      "syntax": "sys_GetRegLongint(&L;&T;&T;&L;&L):L",
       "preemptive": true
     }
   ]
