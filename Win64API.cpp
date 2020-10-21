@@ -16,10 +16,8 @@
 
 const char* const win32Commands[] = {
 	"sys_GetRegEnum"
-	,"sys_GetRegText" // ACW 10/16/20 WIN-80
+	,"sys_GetRegText" // ACW 10/20/20 WIN-78 
 	,"sys_GetRegLongint" // ACW 10/16/20 WIN-80
-	,"sys_GetRegArray" // ACW 10/16/20 WIN-80
-	,"sys_GetRegBlob" // ACW 10/16/20 WIN-80
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -40,8 +38,6 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 
 		case 2: // sys_GetRegText
 		case 3: // sys_GetRegLongint
-		case 4: // sys_GetRegArray
-		case 5: // sys_GetRegBlob
 			// ACW 10/16/20 WIN-80
 			sys_GetRegKey(params);
 			break;

@@ -28,7 +28,7 @@ void sys_GetRegEnum(PA_PluginParameters params)
 	paSubKeyNames = PA_GetStringParameter(params, 2);
 	paReturnKeyNamesArray = PA_GetVariableParameter(params, 3);
 	lEnum32 = PA_GetLongParameter(params, 4); // WJF 4/22/16 Win-15
-
+	
 	regSamFlag = KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE ;
 
 	if (lEnum32) {
@@ -91,10 +91,13 @@ void sys_GetRegKey(PA_PluginParameters params)
 	DWORD dwDataType, dwDataSize;
 	HKEY hRootKey, hOpenKey;
 	REGSAM regSamFlag;
+	WCHAR *pcReturnDataBuffer;
+
 
 	PA_long32 lRootKey, lReturnValue, lEnum32, lReturnLong;
 	PA_Unistring* paSubKeyNames;
 	PA_Unistring* paRegName;
+	PA_Unistring* ppavReturnData;
 
 	lRootKey = PA_GetLongParameter(params, 1);
 	paSubKeyNames = PA_GetStringParameter(params, 2);
@@ -111,6 +114,7 @@ void sys_GetRegKey(PA_PluginParameters params)
 		regSamFlag = regSamFlag | KEY_WOW64_64KEY;
 	}
 	
+	pcReturnDataBuffer = NULL;
 	dwDataSize = 0;
 	lReturnValue = 0;
 	hRootKey = hOpenKey = 0;
@@ -124,10 +128,6 @@ void sys_GetRegKey(PA_PluginParameters params)
 		{
 			switch (dwDataType)
 			{
-				case REG_BINARY:
-
-					break;
-
 				case REG_DWORD:
 				case REG_DWORD_BIG_ENDIAN:
 					// sys_GetRegLongint
@@ -135,20 +135,29 @@ void sys_GetRegKey(PA_PluginParameters params)
 					if (RegQueryValueEx(hOpenKey, (LPCWSTR)paRegName->fString, NULL, NULL, (LPBYTE)&lReturnLong, &dwDataSize) == ERROR_SUCCESS)
 					{
 						PA_SetLongParameter(params, 4, lReturnLong);
+					
 						lReturnValue = 1;
 					}
 
 					break;
 
-				case REG_EXPAND_SZ:
-
-					break;
-
-				case REG_MULTI_SZ:
-
-					break;
-
 				case REG_SZ:
+				case REG_EXPAND_SZ:
+					// sys_GetRegText
+
+					pcReturnDataBuffer = (WCHAR*) malloc(sizeof(WCHAR) * (dwDataSize + 1));
+										
+					// WJF 6/24/16 Win-21 Casting to LPBYTE
+					if (RegQueryValueEx(hOpenKey, (LPCWSTR)paRegName->fString, NULL, NULL, (LPBYTE)pcReturnDataBuffer, &dwDataSize) == ERROR_SUCCESS)
+					{
+						ppavReturnData = PA_GetStringParameter(params, 4);
+						
+						PA_SetUnistring(ppavReturnData, (PA_Unichar*)pcReturnDataBuffer);
+
+						lReturnValue = 1;
+					}
+
+					free(pcReturnDataBuffer);
 
 					break;
 

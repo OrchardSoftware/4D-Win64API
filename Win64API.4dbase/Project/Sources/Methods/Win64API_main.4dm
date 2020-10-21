@@ -14,5 +14,11 @@ $bMemoryTest:=False:C215
   // ACW 10/16/20 WIN-71
 win_71 ($bMemoryTest)
 
+  // ACW 10/20/20 WIN-78
+win_78 ($bMemoryTest)
+
   // ACW 10/16/20 WIN-80
 win_80 ($bMemoryTest)
+
+  // End of demo/unit test; if we haven't hit a TRACE up until now all the commands are working as expected.
+TRACE:C157

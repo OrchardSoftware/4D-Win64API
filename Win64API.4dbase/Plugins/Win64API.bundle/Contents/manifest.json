@@ -1,16 +1,21 @@
 ﻿{
-  "name": "Win64API",
-  "id": 15000,
   "commands": [
     {
-      "theme": "Win64API Commands",
+      "preemptive": true,
       "syntax": "sys_GetRegEnum(&L;&T;&Y;&L):L",
-      "preemptive": true
+      "theme": "Win64API Commands"
     },
     {
-      "theme": "Win64API Commands",
+      "preemptive": true,
       "syntax": "sys_GetRegLongint(&L;&T;&T;&L;&L):L",
-      "preemptive": true
+      "theme": "Win64API Commands"
+    },
+    {
+      "preemptive": true,
+      "syntax": "sys_GetRegText(&L;&T;&T;&T;&L):L",
+      "theme": "Win64API Commands"
     }
-  ]
+  ],
+  "id": 15000,
+  "name": "Win64API"
 }
