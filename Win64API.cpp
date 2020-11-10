@@ -12,12 +12,13 @@
 
 #include "Win64API.h"
 #include "Registry.h"
-
+#include "WindowManagement.h"
 
 const char* const win32Commands[] = {
 	"sys_GetRegEnum"
 	,"sys_GetRegText" // ACW 10/20/20 WIN-78 
 	,"sys_GetRegLongint" // ACW 10/16/20 WIN-80
+	,"gui_GetWindowEx" // ACW 10/23/20 WIN-107
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -41,12 +42,26 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			// ACW 10/16/20 WIN-80
 			sys_GetRegKey(params);
 			break;
+
+		case 4: // gui_getWindowEx
+			// ACW 10/26/20 WIN-107 
+			gui_GetWindowEx(params);
+			break;
+
+		case 5: // gui_setWindowTitleEx
+			// ACW 10/28/20 WIN-108
+			gui_setWindowTitleEx(params);
+			break;
 	}	
 }
 
 void InitPlugin()
 {
-	// write initialisation code here...
+
+	// WJF 9/1/15 #43731
+	// ACW 10/28/20 WIN-107 Changed handleArray_init to initWindowManagement
+	initWindowManagement();
+
 }
 
 void DeinitPlugin()

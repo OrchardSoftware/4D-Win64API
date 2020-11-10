@@ -14,6 +14,14 @@
       "preemptive": true,
       "syntax": "sys_GetRegText(&L;&T;&T;&T;&L):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_GetWindowEx(&T):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_SetWindowTitleEx(&L;&T):L",
+      "theme": "Wi64API Commands"
     }
   ],
   "id": 15000,

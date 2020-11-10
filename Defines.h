@@ -7,3 +7,5 @@
 #define SMLBUF						256
 
 #define MAX_REG_SIZE				16383
+
+#define HANDLEARRAY_CAPACITY		4096 // WJF 9/1/15 #43731 32 KB in 64-bit, 16 in 32-bit
