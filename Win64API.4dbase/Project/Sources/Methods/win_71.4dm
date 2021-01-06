@@ -3,6 +3,8 @@
   //
   // This methos will test the sys_GetRegEnum command
   //
+  // $1 - True if we are debugging memory issues
+  //
   // ACW 10/16/20 WIN-71
 
 C_BOOLEAN:C305($1;$bMemoryTest)

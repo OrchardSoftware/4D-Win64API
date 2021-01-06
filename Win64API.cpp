@@ -46,11 +46,15 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 		case 4: // gui_getWindowEx
 			// ACW 10/26/20 WIN-107 
 			gui_GetWindowEx(params);
+
 			break;
 
 		case 5: // gui_setWindowTitleEx
 			// ACW 10/28/20 WIN-108
-			gui_setWindowTitleEx(params);
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_setWindowTitleEx, params);
+			//gui_setWindowTitleEx(params);
+
+
 			break;
 	}	
 }
