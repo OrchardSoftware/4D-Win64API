@@ -1,4 +1,8 @@
 
-TRACE:C157  // Client test
+C_LONGINT:C283($lProcess)
 
-Win64API_main 
+$lProcess:=New process:C317("Win64API_client";0)
+
+
+
+

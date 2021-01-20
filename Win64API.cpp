@@ -18,7 +18,12 @@ const char* const win32Commands[] = {
 	"sys_GetRegEnum"
 	,"sys_GetRegText" // ACW 10/20/20 WIN-78 
 	,"sys_GetRegLongint" // ACW 10/16/20 WIN-80
-	,"gui_GetWindowEx" // ACW 10/23/20 WIN-107
+	,"gui_SetWindowTitleEx" // ACW 10/28/20 WIN-108
+	,"gui_SetIconEX" // ACW 1/8/21 WIN-113
+	,"gui_GetWindowStateEx" // ACW 1/11/21 WIN-109
+	,"gui_TakeScreenshotEx" // ACW 1/12/21 WIN-111
+	,"gui_ShowWindowEx" // ACW 1/14/21 WIN-112
+	,"gui_DisableCloseBox" // ACW 1/14/21 WIN-114
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -43,18 +48,34 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			sys_GetRegKey(params);
 			break;
 
-		case 4: // gui_getWindowEx
-			// ACW 10/26/20 WIN-107 
-			gui_GetWindowEx(params);
-
+		case 4: // gui_setWindowTitleEx
+			// ACW 10/28/20 WIN-108
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetWindowTitleEx, params);
 			break;
 
-		case 5: // gui_setWindowTitleEx
-			// ACW 10/28/20 WIN-108
-			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_setWindowTitleEx, params);
-			//gui_setWindowTitleEx(params);
+		case 5: // gui_setIconEX
+			// ACW 1/8/21 WIN-113
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetIconEx, params);
+			break;
 
+		case 6: // gui_GetWindowStateEx
+			// ACW 1/11/21 WIN-109
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_GetWindowStateEx, params);
+			break;
 
+		case 7: // gui_TakeScreenshotEx
+			// ACW 1/12/21 WIN-111
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_TakeScreenshotEx, params);
+			break;
+
+		case 8: // gui_ShowWindowEx
+			// ACW 1/14/21 WIN-112
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_ShowWindowEx, params);
+			break;
+
+		case 9: // gui_DisableCloseBoxEx
+			// ACW 1/14/21 WIN-114
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_DisableCloseBoxEx, params);
 			break;
 	}	
 }
@@ -70,7 +91,7 @@ void InitPlugin()
 
 void DeinitPlugin()
 {
-	// write deinitialisation code here...
+	// Write deinitialisation code here...
 }
 
 
