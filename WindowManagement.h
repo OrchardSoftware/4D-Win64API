@@ -12,28 +12,20 @@
 
 #include "Defines.h"
 #include "windows.h"
+#include <unordered_map> // ACW 1/8/21 WIN-113
 
-typedef struct 
-{
-	HWND		fourDhWnd; // 4D main window
-	HWND		prtSettingshWnd; // handle your print settings dialog
-	HWND		prthWnd; // handle to print dialog
-	HWND		MDIhWnd;
-	HWND		hwndTT; // used for tool tips
-	HWND		displayedTTOwnerhwnd; // used for tool tips
-	HWND		openSaveTBhwnd; // used in Open/Save dialog
-	HWND		MDIs_4DhWnd; // window to get class for all 4D windows (ProToolsSubMDIWndClass)
-} WINDOWHANDLES;
+#define Win64_MDI_WinRef (-1)
+
+#define IS_ICONIC 1
+#define IS_ZOOMED 2
 
 // Internal methods
-HWND getCurrentFrontmostWindow();
-DWORD handleArray_init();
-INT handleArray_add(LONG_PTR handle); // WJF 6/24/16 Win-21 DWORD to INT
-HWND handleArray_retrieve(DWORD handleIndex);
-HWND getWindowHandle(PA_Unistring* paWindowTitle, HWND hWnd);
 void initWindowManagement();
 
-
 // Published methods
-void gui_GetWindowEx(PA_PluginParameters params); // ACW 10/26/20 WIN-107
-void gui_setWindowTitleEx(PA_PluginParameters params); // ACW 10/27/20 WIN-108
+void gui_SetWindowTitleEx(PA_PluginParameters params); // ACW 10/27/20 WIN-108
+void gui_SetIconEx(PA_PluginParameters params); // ACW 1/8/21 WIN-113
+void gui_GetWindowStateEx(PA_PluginParameters params); // ACW 1/11/21 WIN-109
+void gui_TakeScreenshotEx(PA_PluginParameters params); // ACW 1/12/21 WIN-111
+void gui_ShowWindowEx(PA_PluginParameters params); // ACW 1/14/21 WIN-112
+void gui_DisableCloseBoxEx(PA_PluginParameters params); // ACW 1/14/21 WIN-114

@@ -28,4 +28,43 @@
     </trans-unit>
   </group>
 
+  <group id="239" restype="x-4DK#">
+    <trans-unit id="240">
+      <source>WINAPI_ShowWindow</source>
+    </trans-unit>
+    <trans-unit d4:value="0" id="241">
+      <source>SW_HIDE</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="242">
+      <source>SW_SHOWNORMAL</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="243">
+      <source>SW_SHOWMINIMIZED</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="244">
+      <source>SW_SHOWMAXIMIZED</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="245">
+      <source>SW_MAXIMIZE</source>
+    </trans-unit>
+    <trans-unit d4:value="4" id="246">
+      <source>SW_SHOWNOACTIVATE</source>
+    </trans-unit>
+    <trans-unit d4:value="5" id="247">
+      <source>SW_SHOW</source>
+    </trans-unit>
+    <trans-unit d4:value="6" id="248">
+      <source>SW_MINIMIZE</source>
+    </trans-unit>
+    <trans-unit d4:value="7" id="249">
+      <source>SW_SHOWMINNOACTIVE</source>
+    </trans-unit>
+    <trans-unit d4:value="8" id="250">
+      <source>SW_SHOWNA</source>
+    </trans-unit>
+    <trans-unit d4:value="9" id="251">
+      <source>SW_RESTORE</source>
+    </trans-unit>
+  </group>
+
 </xliff>

@@ -1,0 +1,81 @@
+{
+    "windowTitle": "Hello World",
+    "windowMinWidth": 400,
+    "windowMinHeight": 400,
+    "method": "Win64API_dialog",
+    "events": [
+                "onLoad",
+                "onTimer"
+              ],
+    "pages": [
+        null,
+        {
+            "objects": {
+                "tTitle": {
+                "type": "text",
+                "text": "Win64API Demo",
+                "textAlign": "left",
+                "left": 15,
+                "top": 15,
+                "width": 350,
+                "height": 20
+                },
+            "lbOutput": {
+				 	           "type": "listbox",
+					           "top": 40,
+					"left": 15,
+					"width": 370,
+					"height": 310,
+					"sizingY": "grow",
+          "sizingX": "grow",
+					"sortable": false,
+					"movableRows": false,
+					"rowHeight": "25px",
+					"rowHeightAutoMin": "25px",
+					"rowHeightAutoMax": "25px",
+					"selectionMode": "single",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"stroke": "#000000",
+					"fill": "transparent",
+					"fontFamily": "Segoe UI",
+					"fontSize": 11,
+					"events": [
+						"onLoad"
+					],
+					"columns": [
+						{
+							"name": "column1",
+							"dataSource": "atWIN64Output",
+							"width": 370,
+							"minWidth": 10,
+							"maxWidth": 32000,
+							"enterable": false,
+              "stroke": "#000000",
+							"fontFamily": "Segoe UI",
+							"fontSize": 11,
+							"header": {
+								"name": "column1Header",
+								"text": "Output",
+								"stroke": "#000000",
+								"fontFamily": "Segoe UI",
+								"fontSize": 11
+							}
+						}
+					]
+				},
+                "btnOK": {
+                "type": "button",
+                "text": "OK",
+                "action": "Cancel",
+                "left": 285,
+                "top": 365,
+                "width": 100,
+                "height": 20,
+                "sizingY": "move",
+                "sizingX": "move"
+                }
+            }
+        }
+    ]
+}

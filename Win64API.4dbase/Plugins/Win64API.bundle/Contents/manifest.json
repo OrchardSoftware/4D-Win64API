@@ -16,12 +16,28 @@
       "theme": "Win64API Commands"
     },
     {
-      "syntax": "gui_GetWindowEx(&T):L",
+      "syntax": "gui_SetWindowTitleEx(&L;&T):L",
       "theme": "Win64API Commands"
     },
     {
-      "syntax": "gui_SetWindowTitleEx(&L;&T):L",
-      "theme": "Wi64API Commands"
+      "syntax": "gui_SetIconEx(&L;&T):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_GetWindowStateEx(&L):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_TakeScreenshotEx(&L;&T):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_ShowWindowEx(&L;&L):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_DisableCloseBoxEx(&L):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
