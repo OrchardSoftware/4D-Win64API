@@ -68,7 +68,6 @@ void gui_SetWindowTitleEx(PA_PluginParameters params) {
 //
 //  FUNCTION: gui_SetIconEx( PA_PluginParameters params )
 //
-
 void gui_SetIconEx(PA_PluginParameters params)
 {
 	PA_long32 PAL4DWinRef, PALReturnValue;

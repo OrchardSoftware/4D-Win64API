@@ -38,6 +38,10 @@
     {
       "syntax": "gui_DisableCloseBoxEx(&L):L",
       "theme": "Win64API Commands"
+    }, 
+    {
+      "theme": "Win64API Commands",
+      "syntax": "sys_PlayWav(&T):L"
     }
   ],
   "id": 15000,
