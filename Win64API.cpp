@@ -13,6 +13,7 @@
 #include "Win64API.h"
 #include "Registry.h"
 #include "WindowManagement.h"
+#include "Miscellaneous.h"
 
 const char* const win32Commands[] = {
 	"sys_GetRegEnum"
@@ -24,6 +25,7 @@ const char* const win32Commands[] = {
 	,"gui_TakeScreenshotEx" // ACW 1/12/21 WIN-111
 	,"gui_ShowWindowEx" // ACW 1/14/21 WIN-112
 	,"gui_DisableCloseBox" // ACW 1/14/21 WIN-114
+	,"sys_PlayWav" // ACW 2/23/21 WIN-87
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -77,6 +79,10 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			// ACW 1/14/21 WIN-114
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_DisableCloseBoxEx, params);
 			break;
+
+		case 10: // sys_PlayWav
+			// ACW 2/23/21 WIN-87
+			sys_PlayWav(params);
 	}	
 }
 
