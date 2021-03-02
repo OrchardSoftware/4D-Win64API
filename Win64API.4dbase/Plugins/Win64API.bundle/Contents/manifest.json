@@ -28,10 +28,6 @@
       "theme": "Win64API Commands"
     },
     {
-      "syntax": "gui_TakeScreenshotEx(&L;&T):L",
-      "theme": "Win64API Commands"
-    },
-    {
       "syntax": "gui_ShowWindowEx(&L;&L):L",
       "theme": "Win64API Commands"
     },

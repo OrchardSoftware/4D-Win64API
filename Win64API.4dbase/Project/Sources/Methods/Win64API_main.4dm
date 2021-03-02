@@ -39,9 +39,6 @@ win_113 ($bMemoryTest;$lWinRef)
   // ACW 1/11/21 WIN-109 This test is done on the demo dialog
   // win_109 ($bMemoryTest;$lWinRef)
 
-  // ACW 1/12/21 WIN-111
-win_111 ($bMemoryTest;$lWinRef)
-
   // ACW 1/14/21 WIN-112
 win_112 ($bMemoryTest;$lWinRef)
 

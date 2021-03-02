@@ -26,6 +26,5 @@ void initWindowManagement();
 void gui_SetWindowTitleEx(PA_PluginParameters params); // ACW 10/27/20 WIN-108
 void gui_SetIconEx(PA_PluginParameters params); // ACW 1/8/21 WIN-113
 void gui_GetWindowStateEx(PA_PluginParameters params); // ACW 1/11/21 WIN-109
-void gui_TakeScreenshotEx(PA_PluginParameters params); // ACW 1/12/21 WIN-111
 void gui_ShowWindowEx(PA_PluginParameters params); // ACW 1/14/21 WIN-112
 void gui_DisableCloseBoxEx(PA_PluginParameters params); // ACW 1/14/21 WIN-114
