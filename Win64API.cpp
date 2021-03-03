@@ -22,7 +22,6 @@ const char* const win32Commands[] = {
 	,"gui_SetWindowTitleEx" // ACW 10/28/20 WIN-108
 	,"gui_SetIconEX" // ACW 1/8/21 WIN-113
 	,"gui_GetWindowStateEx" // ACW 1/11/21 WIN-109
-	,"gui_TakeScreenshotEx" // ACW 1/12/21 WIN-111
 	,"gui_ShowWindowEx" // ACW 1/14/21 WIN-112
 	,"gui_DisableCloseBox" // ACW 1/14/21 WIN-114
 	,"sys_PlayWav" // ACW 2/23/21 WIN-87
@@ -65,17 +64,12 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_GetWindowStateEx, params);
 			break;
 
-		case 7: // gui_TakeScreenshotEx
-			// ACW 1/12/21 WIN-111
-			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_TakeScreenshotEx, params);
-			break;
-
-		case 8: // gui_ShowWindowEx
+		case 7: // gui_ShowWindowEx
 			// ACW 1/14/21 WIN-112
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_ShowWindowEx, params);
 			break;
 
-		case 9: // gui_DisableCloseBoxEx
+		case 8: // gui_DisableCloseBoxEx
 			// ACW 1/14/21 WIN-114
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_DisableCloseBoxEx, params);
 			break;
