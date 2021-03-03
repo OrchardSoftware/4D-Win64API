@@ -91,7 +91,7 @@ void sys_GetRegKey(PA_PluginParameters params)
 	DWORD dwDataType, dwDataSize;
 	HKEY hRootKey, hOpenKey;
 	REGSAM regSamFlag;
-	WCHAR *pcReturnDataBuffer;
+	WCHAR *pcReturnDataBuffer, *pcReturnDataBuffer2;
 
 
 	PA_long32 lRootKey, lReturnValue, lEnum32, lReturnLong;
@@ -146,10 +146,24 @@ void sys_GetRegKey(PA_PluginParameters params)
 					// sys_GetRegText
 
 					pcReturnDataBuffer = (WCHAR*) malloc(sizeof(WCHAR) * (dwDataSize + 1));
-										
+					pcReturnDataBuffer[dwDataSize] = 0;
+
 					// WJF 6/24/16 Win-21 Casting to LPBYTE
 					if (RegQueryValueEx(hOpenKey, (LPCWSTR)paRegName->fString, NULL, NULL, (LPBYTE)pcReturnDataBuffer, &dwDataSize) == ERROR_SUCCESS)
 					{
+						
+						if (dwDataType == REG_EXPAND_SZ) {
+							dwDataSize = ExpandEnvironmentStrings((LPCWSTR)pcReturnDataBuffer, NULL, 0);
+							
+							if (dwDataSize > 0) {
+								pcReturnDataBuffer2 = (WCHAR*)malloc(sizeof(WCHAR) * (dwDataSize));
+								
+								ExpandEnvironmentStrings((LPCWSTR)pcReturnDataBuffer, (LPWSTR)pcReturnDataBuffer2, dwDataSize);
+								free(pcReturnDataBuffer);
+								pcReturnDataBuffer = pcReturnDataBuffer2;
+							}
+						}
+						
 						ppavReturnData = PA_GetStringParameter(params, 4);
 						
 						PA_SetUnistring(ppavReturnData, (PA_Unichar*)pcReturnDataBuffer);
