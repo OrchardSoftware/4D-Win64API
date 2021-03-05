@@ -14,21 +14,43 @@
 #include "Registry.h"
 #include "WindowManagement.h"
 #include "Miscellaneous.h"
+#include "Logging.h"
 
-const char* const win32Commands[] = {
-	"sys_GetRegEnum"
-	,"sys_GetRegText" // ACW 10/20/20 WIN-78 
-	,"sys_GetRegLongint" // ACW 10/16/20 WIN-80
-	,"gui_SetWindowTitleEx" // ACW 10/28/20 WIN-108
-	,"gui_SetIconEX" // ACW 1/8/21 WIN-113
-	,"gui_GetWindowStateEx" // ACW 1/11/21 WIN-109
-	,"gui_ShowWindowEx" // ACW 1/14/21 WIN-112
-	,"gui_DisableCloseBox" // ACW 1/14/21 WIN-114
-	,"sys_PlayWav" // ACW 2/23/21 WIN-87
+const wchar_t* const win32Commands[] = {
+	L"sys_GetRegEnum"
+	,L"sys_GetRegText" // ACW 10/20/20 WIN-78 
+	,L"sys_GetRegLongint" // ACW 10/16/20 WIN-80
+	,L"gui_SetWindowTitleEx" // ACW 10/28/20 WIN-108
+	,L"gui_SetIconEX" // ACW 1/8/21 WIN-113
+	,L"gui_GetWindowStateEx" // ACW 1/11/21 WIN-109
+	,L"gui_ShowWindowEx" // ACW 1/14/21 WIN-112
+	,L"gui_DisableCloseBox" // ACW 1/14/21 WIN-114
+	,L"sys_PlayWav" // ACW 2/23/21 WIN-87
+	,L"sys_LoggingStart" // ACW 3/4/21 WIN-105
+	,L"sys_LoggingStop" // ACW 3/4/21 WIN-76
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
 {
+
+	WCHAR *wCommandID;
+
+	if ((selector > 0) && (selector < NUM_COMMANDS)) { // WJF 7/11/16 Win-20 200 -> NUM_COMMANDS, <= -> <
+		size_t bufferSize = (5 + wcslen(win32Commands[selector - 1]));
+		wCommandID = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);		
+		
+		// WJF 7/11/16 Win-20 szCommandConst -> win32Commands[selector-1]  
+		// ZRW 3/23/17 WIN-39 128 -> sizeof(szCommandID)
+		// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
+		wcscpy_s(wCommandID, bufferSize, win32Commands[selector - 1]);
+																					
+		// ZRW 4/5/17 WIN-39 128 -> sizeof(szCommandID)
+		// ACW 3/3/21 WIN-105 strcat_s -> wcscat_s
+		wcscat_s(wCommandID, bufferSize, L"\r\n");
+
+		writeLogFile(wCommandID);
+	}
+
 	switch (selector)
 	{
 		case kInitPlugin:
@@ -74,9 +96,20 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_DisableCloseBoxEx, params);
 			break;
 
-		case 10: // sys_PlayWav
+		case 9: // sys_PlayWav
 			// ACW 2/23/21 WIN-87
 			sys_PlayWav(params);
+			break;
+
+		case 10: // sys_LoggingStart
+			// ACW 3/4/21 WIN-105
+			sys_LoggingStart(params);
+			break;
+
+		case 11: // sys_LoggingStop
+			// ACW 3/4/21 WIN-76
+			sys_LoggingStop(params);
+			break;
 	}	
 }
 

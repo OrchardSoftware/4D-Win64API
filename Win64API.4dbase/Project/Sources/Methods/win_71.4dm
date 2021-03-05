@@ -1,7 +1,7 @@
 //%attributes = {}
   // win_71
   //
-  // This methos will test the sys_GetRegEnum command
+  // This method will test the sys_GetRegEnum command
   //
   // $1 - True if we are debugging memory issues
   //
