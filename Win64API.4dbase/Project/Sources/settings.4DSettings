@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="6">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="7">
 	<com.4d>
 		<database>
 			<cache flush_buffer_delay="15" size_fixed="32" size_maximum="100" size_reserved="128"/>
@@ -40,5 +40,8 @@
 		<deployment>
 			<options/>
 		</deployment>
+		<compiler>
+			<options compilation_path="3" initialize_local_variables="1"/>
+		</compiler>
 	</com.4d>
 </preferences>

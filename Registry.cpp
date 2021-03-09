@@ -92,8 +92,7 @@ void sys_GetRegKey(PA_PluginParameters params)
 	HKEY hRootKey, hOpenKey;
 	REGSAM regSamFlag;
 	WCHAR *pcReturnDataBuffer;
-
-
+	
 	PA_long32 lRootKey, lReturnValue, lEnum32, lReturnLong;
 	PA_Unistring* paSubKeyNames;
 	PA_Unistring* paRegName;
@@ -170,6 +169,108 @@ void sys_GetRegKey(PA_PluginParameters params)
 
 	// Set the return value
 	PA_ReturnLong(params, lReturnValue);
+}
+
+// ------------------------------------------------
+//
+//  FUNCTION: sys_SetRegKey( PA_PluginParameters params, LONG_PTR selector )
+//
+//  PURPOSE:  Set a registry key value.
+//
+//	DATE:	  REB 11/17/10 #25402
+//
+// ACW 3/8/21 WIN-97
+//
+void sys_SetRegKey(PA_PluginParameters params, LONG_PTR selector)
+{
+	PA_long32 PALRootKey, PALReturnValue, PALValue;
+	PA_Unistring *PAUSubKeyNames, *PAURegName, *PAUValue;
+
+	DWORD dwDataType;
+	DWORD keyState = 0, dataSize = 0;
+	LONG retErr;
+	HKEY hRootKey, hOpenKey;
+
+	hRootKey = hOpenKey = 0;
+
+	// Get the function parameters.
+	PALRootKey = PA_GetLongParameter(params, 1);
+	PAUSubKeyNames = PA_GetStringParameter(params, 2);
+	PAURegName = PA_GetStringParameter(params, 3);
+
+	// Convert the 4d registry constant into a Windows registry key.
+	hRootKey = util_getRegRoot(PALRootKey);
+
+	// Open the registry key.
+	retErr = RegOpenKeyEx(hRootKey, (LPCWSTR)PAUSubKeyNames->fString, 0, KEY_ALL_ACCESS, &hOpenKey);
+
+	PALReturnValue = -99;
+
+	// If the key does not exist create it now.
+	if (retErr == ERROR_FILE_NOT_FOUND) {
+		PALReturnValue = -98;
+		retErr = RegCreateKeyEx(hRootKey, (LPCWSTR)PAUSubKeyNames->fString, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hOpenKey, &keyState);
+	}
+
+	if (retErr == ERROR_SUCCESS) {
+		PALReturnValue = -97;
+
+		// Get the value type from the registry.
+		retErr = RegQueryValueEx(hOpenKey, (LPCWSTR)PAURegName->fString, NULL, &dwDataType, NULL, &dataSize);
+
+		// If the value was not found we'll need to determine the type based on the value passed in.
+		if (retErr == ERROR_FILE_NOT_FOUND) {
+			switch (selector) {
+				case 10: // sys_SetRegLongint
+					dwDataType = REG_DWORD;
+					retErr = ERROR_SUCCESS;
+					break;
+				case 11: // sys_SetRegText
+					dwDataType = REG_SZ;
+					retErr = ERROR_SUCCESS;
+					break;
+			}
+		}
+
+		if (retErr == ERROR_SUCCESS) {
+			switch (dwDataType) {
+				case REG_DWORD:
+				case REG_DWORD_BIG_ENDIAN:
+					PALValue = PA_GetLongParameter(params, 4);
+				
+					retErr = RegSetValueEx(hOpenKey, (LPCWSTR)PAURegName->fString, NULL, dwDataType, (PBYTE)&PALValue, sizeof(PALValue));
+
+					if (retErr == ERROR_SUCCESS) {
+						PALReturnValue = 1;
+					}
+					else {
+						PALReturnValue = retErr * -1;
+					}
+
+					break;
+
+				case REG_EXPAND_SZ:
+				case REG_SZ:
+					PAUValue = PA_GetStringParameter(params, 4);
+					
+					retErr = RegSetValueEx(hOpenKey, (LPCWSTR)PAURegName->fString, NULL, dwDataType, (LPCBYTE)PAUValue->fString, (DWORD) ((PAUValue->fLength +1) * sizeof (WCHAR))); 
+
+					if (retErr == ERROR_SUCCESS) {
+						PALReturnValue = 1;
+					}
+					else {
+						PALReturnValue = retErr * -1;
+					}
+
+					break;
+			}
+		}
+
+
+	}
+
+	RegCloseKey(hOpenKey);
+	PA_ReturnLong(params, PALReturnValue);
 }
 
 HKEY util_getRegRoot(PA_long32 lKey) {

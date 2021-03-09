@@ -48,6 +48,11 @@ win_114 ($bMemoryTest;$lWinRef)
   // ACW 2/23/21 WIN-87
 win_87 ($bMemoryTest)
 
+  // ACW 3/8/21 WIN-97
+win_97 ($bMemoryTest)
+
+  // ACW 3/9/21 WIN-99
+win_99 ($bMemoryTest)
 
   // End of demo/unit test; if we haven't hit a TRACE up until now all the commands are working as expected.
 TRACE:C157

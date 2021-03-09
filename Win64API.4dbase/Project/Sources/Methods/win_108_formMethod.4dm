@@ -3,7 +3,8 @@
   //
   // ACW 1/7/21 WIN-108
 
-C_LONGINT:C283($lErr)
+C_LONGINT:C283($i;$lErr)
+C_TEXT:C284($tTest)
 
   // While we'd recommend using SET WINDOW TITLE you could use gui_SetWindowTitleEx
 $lErr:=gui_SetWindowTitleEx (Current form window:C827;"Win64API Demo - Internal Dialog")

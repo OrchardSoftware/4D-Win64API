@@ -14,6 +14,8 @@ C_LONGINT:C283($2;$lWinRef)
 $bMemoryTest:=$1
 $lWinRef:=$2
 
+C_LONGINT:C283($lErr)
+
   // Don't know if you'd want to do this
 $lErr:=gui_DisableCloseBoxEx (-1)
 

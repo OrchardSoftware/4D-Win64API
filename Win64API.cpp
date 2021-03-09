@@ -25,6 +25,8 @@ const char* const win32Commands[] = {
 	,"gui_ShowWindowEx" // ACW 1/14/21 WIN-112
 	,"gui_DisableCloseBox" // ACW 1/14/21 WIN-114
 	,"sys_PlayWav" // ACW 2/23/21 WIN-87
+	,"sys_SetRegLongint" // ACW 3/8/21 WIN-97
+	,"sys_SetRegText" // ACW 3/9/21 WIN-99
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -74,9 +76,21 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_DisableCloseBoxEx, params);
 			break;
 
-		case 10: // sys_PlayWav
+		case 9: // sys_PlayWav
 			// ACW 2/23/21 WIN-87
 			sys_PlayWav(params);
+			break;
+
+		case 10: // sys_SetRegLongint
+			// ACW 3/8/21 WIN-97
+			sys_SetRegKey(params, selector); 
+			break;
+
+		case 11: // sys_SetRegLongint
+			// ACW 3/9/21 WIN-99
+			sys_SetRegKey(params, selector);
+			break;
+
 	}	
 }
 

@@ -11,7 +11,7 @@ C_BOOLEAN:C305($1;$bMemoryTest)
 
 $bMemoryTest:=$1
 
-C_LONGINT:C283($lErr)
+C_LONGINT:C283($lErr;$i)
 C_TEXT:C284($tProfileListDefault;$tCurrentVersion)
 
   // *** Registry type REG_EXPAND_SZ

@@ -1,5 +1,32 @@
 //%attributes = {}
 
+C_TEXT:C284(Win64API_dialog_output ;$1)
+
+C_LONGINT:C283(Win64API_main ;$1)
+
 C_BOOLEAN:C305(win_71 ;$1)
 
+C_BOOLEAN:C305(win_78 ;$1)
+
 C_BOOLEAN:C305(win_80 ;$1)
+
+C_BOOLEAN:C305(win_87 ;$1)
+
+C_BOOLEAN:C305(win_97 ;$1)
+
+C_BOOLEAN:C305(win_99 ;$1)
+
+C_BOOLEAN:C305(win_108 ;$1)
+C_LONGINT:C283(win_108 ;$2)
+
+C_BOOLEAN:C305(win_109 ;$1)
+C_LONGINT:C283(win_109 ;$2)
+
+C_BOOLEAN:C305(win_112 ;$1)
+C_LONGINT:C283(win_112 ;$2)
+
+C_BOOLEAN:C305(win_113 ;$1)
+C_LONGINT:C283(win_113 ;$2)
+
+C_BOOLEAN:C305(win_114 ;$1)
+C_LONGINT:C283(win_114 ;$2)

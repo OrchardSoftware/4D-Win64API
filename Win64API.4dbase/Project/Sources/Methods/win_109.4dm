@@ -14,6 +14,8 @@ C_LONGINT:C283($2;$lWinRef)
 $bMemoryTest:=$1
 $lWinRef:=$2
 
+C_LONGINT:C283($lState;$i)
+
 $lState:=gui_GetWindowStateEx (-1)
 If ($lWinRef>0)
 	Win64API_dialog_output ("gui_GetWindowStateEx (MDI): "+String:C10($lState))
