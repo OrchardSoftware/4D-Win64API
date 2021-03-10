@@ -11,7 +11,7 @@ C_BOOLEAN:C305($1;$bMemoryTest)
 
 $bMemoryTest:=$1
 
-C_LONGINT:C283($lErr)
+C_LONGINT:C283($lErr;$i)
 C_LONGINT:C283($lCurrentVersion)
 
 $lErr:=sys_GetRegLongint (GR_HKEY_LOCAL_MACHINE;"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";"CurrentMajorVersionNumber";$lCurrentVersion)

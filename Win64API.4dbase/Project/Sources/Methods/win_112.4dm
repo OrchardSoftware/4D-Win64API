@@ -14,6 +14,8 @@ C_LONGINT:C283($2;$lWinRef)
 $bMemoryTest:=$1
 $lWinRef:=$2
 
+C_LONGINT:C283($lErr)
+
 $lErr:=gui_ShowWindowEx (-1;SW_MINIMIZE)
 
 DELAY PROCESS:C323(Current process:C322;25)

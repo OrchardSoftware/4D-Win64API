@@ -31,3 +31,4 @@ HKEY util_getRegRoot(PA_long32 lKey);
 // Published methods
 void sys_GetRegEnum(PA_PluginParameters params); 
 void sys_GetRegKey(PA_PluginParameters params); // ACW 10/16/20 WIN-80
+void sys_SetRegKey(PA_PluginParameters params, PA_long32 selector); // ACW 3/8/21 WIN-97
