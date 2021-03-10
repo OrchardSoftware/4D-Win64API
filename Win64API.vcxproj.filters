@@ -8,6 +8,7 @@
     <ClCompile Include="Registry.cpp" />
     <ClCompile Include="WindowManagement.cpp" />
     <ClCompile Include="Miscellaneous.cpp" />
+    <ClCompile Include="Logging.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="4D Plugin API\4DPluginAPI.h">
@@ -30,6 +31,7 @@
     <ClInclude Include="Registry.h" />
     <ClInclude Include="WindowManagement.h" />
     <ClInclude Include="Miscellaneous.h" />
+    <ClInclude Include="Logging.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="4D Plugin API\4DPluginAPI.def">

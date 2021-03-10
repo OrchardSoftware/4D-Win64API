@@ -1,17 +1,14 @@
 ﻿{
   "commands": [
     {
-      "preemptive": true,
       "syntax": "sys_GetRegEnum(&L;&T;&Y;&L):L",
       "theme": "Win64API Commands"
     },
     {
-      "preemptive": true,
       "syntax": "sys_GetRegLongint(&L;&T;&T;&L;&L):L",
       "theme": "Win64API Commands"
     },
     {
-      "preemptive": true,
       "syntax": "sys_GetRegText(&L;&T;&T;&T;&L):L",
       "theme": "Win64API Commands"
     },
@@ -36,8 +33,16 @@
       "theme": "Win64API Commands"
     },
     {
-      "theme": "Win64API Commands",
-      "syntax": "sys_PlayWav(&T):L"
+      "syntax": "sys_PlayWav(&T):L",
+      "theme": "Win64API Commands"      
+    },
+    {
+      "syntax": "sys_LoggingStart(&T;&L):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_LoggingStop:L",
+      "theme": "Win64API Commands"      
     },
     {
       "theme": "Win64API Commands",
