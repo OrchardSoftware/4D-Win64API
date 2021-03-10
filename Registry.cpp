@@ -235,11 +235,11 @@ void sys_SetRegKey(PA_PluginParameters params, PA_long32 selector)
 		// If the value was not found we'll need to determine the type based on the value passed in.
 		if (retErr == ERROR_FILE_NOT_FOUND) {
 			switch (selector) {
-				case 10: // sys_SetRegLongint
+				case 12: // sys_SetRegLongint
 					dwDataType = REG_DWORD;
 					retErr = ERROR_SUCCESS;
 					break;
-				case 11: // sys_SetRegText
+				case 13: // sys_SetRegText
 					dwDataType = REG_SZ;
 					retErr = ERROR_SUCCESS;
 					break;

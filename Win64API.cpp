@@ -28,7 +28,7 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_PlayWav" // ACW 2/23/21 WIN-87
 	,L"sys_LoggingStart" // ACW 3/4/21 WIN-105
 	,L"sys_LoggingStop" // ACW 3/4/21 WIN-76
-  ,L"sys_SetRegLongint" // ACW 3/8/21 WIN-97
+	,L"sys_SetRegLongint" // ACW 3/8/21 WIN-97
 	,L"sys_SetRegText" // ACW 3/9/21 WIN-99
 };
 
@@ -113,7 +113,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			sys_LoggingStop(params);
 			break;
       
-    case 12: // sys_SetRegLongint
+		case 12: // sys_SetRegLongint
 			// ACW 3/8/21 WIN-97
 			sys_SetRegKey(params, selector); 
 			break;

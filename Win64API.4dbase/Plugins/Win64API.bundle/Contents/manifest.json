@@ -45,12 +45,12 @@
       "theme": "Win64API Commands"      
     },
     {
-      "theme": "Win64API Commands",
-      "syntax": "sys_SetRegLongint(&L;&T;&T;&L):L"
+      "syntax": "sys_SetRegLongint(&L;&T;&T;&L):L",
+      "theme": "Win64API Commands"
     },
     {
-      "theme": "Win64API Commands",
-      "syntax": "sys_SetRegText(&L;&T;&T;&T):L"
+      "syntax": "sys_SetRegText(&L;&T;&T;&T):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
