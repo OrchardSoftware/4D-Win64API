@@ -18,6 +18,9 @@ C_BOOLEAN:C305($bMemoryTest)
   // Turn this to true to loop over a command many times to test memory usage.
 $bMemoryTest:=False:C215
 
+  // ACW 3/4/21 WIN-105
+win_105 
+
   // ACW 10/16/20 WIN-71
 win_71 ($bMemoryTest)
 
@@ -48,6 +51,8 @@ win_114 ($bMemoryTest;$lWinRef)
   // ACW 2/23/21 WIN-87
 win_87 ($bMemoryTest)
 
+  // ACW 3/5/21 WIN-76
+win_76 
 
   // End of demo/unit test; if we haven't hit a TRACE up until now all the commands are working as expected.
 TRACE:C157
