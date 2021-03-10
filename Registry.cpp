@@ -187,7 +187,7 @@ void sys_GetRegKey(PA_PluginParameters params)
 
 // ------------------------------------------------
 //
-//  FUNCTION: sys_SetRegKey( PA_PluginParameters params, LONG_PTR selector )
+//  FUNCTION: sys_SetRegKey( PA_PluginParameters params, PA_long32 selector )
 //
 //  PURPOSE:  Set a registry key value.
 //
@@ -195,7 +195,7 @@ void sys_GetRegKey(PA_PluginParameters params)
 //
 // ACW 3/8/21 WIN-97
 //
-void sys_SetRegKey(PA_PluginParameters params, LONG_PTR selector)
+void sys_SetRegKey(PA_PluginParameters params, PA_long32 selector)
 {
 	PA_long32 PALRootKey, PALReturnValue, PALValue;
 	PA_Unistring *PAUSubKeyNames, *PAURegName, *PAUValue;
