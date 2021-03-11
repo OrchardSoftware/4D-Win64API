@@ -51,6 +51,10 @@
     {
       "syntax": "sys_SetRegText(&L;&T;&T;&T):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_SetWindowLongEx(&L;&L;&L):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,

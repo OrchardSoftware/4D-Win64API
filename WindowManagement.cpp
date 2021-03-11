@@ -202,4 +202,46 @@ void gui_DisableCloseBoxEx(PA_PluginParameters params)
 }
 
 
+// ------------------------------------------------
+//
+//  FUNCTION: gui_SetWindowLongEX( PA_PluginParameters params )
+//
+//  PURPOSE:  Multipurpose function to set window styles etc
+//
 
+void gui_SetWindowLongEx(PA_PluginParameters params)
+{
+	PA_long32 PAL4DWinRef, PALReturnValue, PALStyle, PALMode;
+	LONG_PTR lStyle;
+
+	// WJF 8/31/15 #43731 Changed to index from handle to make 64-bit safe
+	// ACW 1/14/21 WIN-114 Changed to be the actual 4D WinRef, -1 for the main application, 0 for current window
+	PAL4DWinRef = PA_GetLongParameter(params, 1);
+	PALStyle = PA_GetLongParameter(params, 2);
+	PALMode = PA_GetLongParameter(params, 3);
+	
+	HWND hWindow = MDI::getWindowHWND(PAL4DWinRef);
+
+	if (IsWindow(hWindow)) {
+		lStyle = GetWindowLong(hWindow, GWL_STYLE);
+		
+		if (PALMode == 1) {
+			lStyle |= (PALStyle);
+		}
+		else {
+			lStyle &= ~(PALStyle);
+		}
+		
+		SetWindowLongPtr(hWindow, GWL_STYLE, lStyle);
+		
+		SetWindowPos(hWindow, HWND_TOP, 0, 0, 0, 0,
+			SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+
+		PALReturnValue = 1;
+	}
+	else {
+		PALReturnValue = 0;
+	}
+
+	PA_ReturnLong(params, PALReturnValue);
+}
