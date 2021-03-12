@@ -60,6 +60,9 @@ win_99 ($bMemoryTest)
   // ACW 3/11/21 WIN-115
 win_115 ($bMemoryTest;$lWinRef)
 
+  // ACW 3/12/21 WIN-118
+win_118 
+
   // ACW 3/5/21 WIN-76
 win_76 
 

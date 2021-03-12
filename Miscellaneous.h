@@ -13,3 +13,4 @@
 
 // Published methods
 void sys_PlayWav(PA_PluginParameters params);
+void gui_SelectColor(PA_PluginParameters params);
