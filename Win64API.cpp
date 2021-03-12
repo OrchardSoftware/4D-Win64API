@@ -30,6 +30,7 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_LoggingStop" // ACW 3/4/21 WIN-76
 	,L"sys_SetRegLongint" // ACW 3/8/21 WIN-97
 	,L"sys_SetRegText" // ACW 3/9/21 WIN-99
+	,L"gui_SelectColor" // ACW 3/11/21 WIN-118
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -121,6 +122,11 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 		case 13: // sys_SetRegLongint
 			// ACW 3/9/21 WIN-99
 			sys_SetRegKey(params, selector);
+			break;
+
+		case 14: // gui_SelectColor
+			// ACW 3/11/21 WIN-118
+			gui_SelectColor(params);
 			break;
 
 	}	

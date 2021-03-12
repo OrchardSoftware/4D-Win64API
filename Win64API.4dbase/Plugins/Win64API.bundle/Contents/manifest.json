@@ -51,6 +51,10 @@
     {
       "syntax": "sys_SetRegText(&L;&T;&T;&T):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_SelectColor(&L;&L;&L;&L;&Y):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
