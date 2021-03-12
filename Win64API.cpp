@@ -31,6 +31,7 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_SetRegLongint" // ACW 3/8/21 WIN-97
 	,L"sys_SetRegText" // ACW 3/9/21 WIN-99
 	,L"gui_SelectColor" // ACW 3/11/21 WIN-118
+	,L"gui_SetWindowLongEx" // ACW 3/11/21 WIN-115
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -127,6 +128,11 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 		case 14: // gui_SelectColor
 			// ACW 3/11/21 WIN-118
 			gui_SelectColor(params);
+			break;
+
+		case 15: // gui_SetWindowLongEx
+			// ACW 3/11/21 WIN-115
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetWindowLongEx, params);
 			break;
 
 	}	

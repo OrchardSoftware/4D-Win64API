@@ -52,10 +52,14 @@
       "syntax": "sys_SetRegText(&L;&T;&T;&T):L",
       "theme": "Win64API Commands"
     },
-    {
-      "syntax": "gui_SelectColor(&L;&L;&L;&L;&Y):L",
+    {    
+      "syntax": "gui_SetWindowLongEx(&L;&L;&L):L",
       "theme": "Win64API Commands"
-    }
+    },
+	{
+	  "syntax": "gui_SelectColor(&L;&L;&L;&L;&Y):L",
+	  "theme": "Win64API Commands"
+	}
   ],
   "id": 15000,
   "name": "Win64API"
