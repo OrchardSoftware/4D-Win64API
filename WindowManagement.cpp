@@ -223,7 +223,7 @@ void gui_SetWindowLongEx(PA_PluginParameters params)
 	HWND hWindow = MDI::getWindowHWND(PAL4DWinRef);
 
 	if (IsWindow(hWindow)) {
-		lStyle = GetWindowLong(hWindow, GWL_STYLE);
+		lStyle = GetWindowLongPtr(hWindow, GWL_STYLE);
 		
 		if (PALMode == 1) {
 			lStyle |= (PALStyle);
