@@ -16,6 +16,8 @@ C_BOOLEAN:C305(win_97 ;$1)
 
 C_BOOLEAN:C305(win_99 ;$1)
 
+C_BOOLEAN:C305(win_104 ;$1)
+
 C_BOOLEAN:C305(win_108 ;$1)
 C_LONGINT:C283(win_108 ;$2)
 

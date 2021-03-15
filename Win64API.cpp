@@ -15,6 +15,7 @@
 #include "WindowManagement.h"
 #include "Miscellaneous.h"
 #include "Logging.h"
+#include "Printing.h"
 
 const wchar_t* const win32Commands[] = {
 	L"sys_GetRegEnum"
@@ -30,8 +31,10 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_LoggingStop" // ACW 3/4/21 WIN-76
 	,L"sys_SetRegLongint" // ACW 3/8/21 WIN-97
 	,L"sys_SetRegText" // ACW 3/9/21 WIN-99
-	,L"gui_SelectColor" // ACW 3/11/21 WIN-118
 	,L"gui_SetWindowLongEx" // ACW 3/11/21 WIN-115
+	,L"gui_SelectColor" // ACW 3/11/21 WIN-118	
+	,L"sys_GetDefPrinter" // ACW 3/15/21 WIN-104
+	,L"sys_SetDefPrinter" // ACW 3/15/21 WIN-120
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -125,14 +128,24 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			sys_SetRegKey(params, selector);
 			break;
 
-		case 14: // gui_SelectColor
+		case 14: // gui_SetWindowLongEx
+				 // ACW 3/11/21 WIN-115
+			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetWindowLongEx, params);
+			break;
+
+		case 15: // gui_SelectColor
 			// ACW 3/11/21 WIN-118
 			gui_SelectColor(params);
 			break;
+			
+		case 16: // sys_GetDefPrinter
+			// ACW 3/15/21 WIN-104
+			sys_GetDefPrinter(params);
+			break;
 
-		case 15: // gui_SetWindowLongEx
-			// ACW 3/11/21 WIN-115
-			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetWindowLongEx, params);
+		case 17: // sys_SetDefPrinter
+			// ACW 3/15/21 WIN-120
+			sys_SetDefPrinter(params);
 			break;
 
 	}	

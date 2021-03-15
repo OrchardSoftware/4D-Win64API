@@ -56,10 +56,18 @@
       "syntax": "gui_SetWindowLongEx(&L;&L;&L):L",
       "theme": "Win64API Commands"
     },
-	{
-	  "syntax": "gui_SelectColor(&L;&L;&L;&L;&Y):L",
-	  "theme": "Win64API Commands"
-	}
+    {
+      "syntax": "gui_SelectColor(&L;&L;&L;&L;&Y):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_GetDefPrinter(&T):L",
+      "theme": "Win64API Commands"
+    },
+     {
+      "syntax": "sys_SetDefPrinter(&T):L",
+      "theme": "Win64API Commands"
+    }
   ],
   "id": 15000,
   "name": "Win64API"
