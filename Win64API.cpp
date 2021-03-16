@@ -35,6 +35,7 @@ const wchar_t* const win32Commands[] = {
 	,L"gui_SelectColor" // ACW 3/11/21 WIN-118	
 	,L"sys_GetDefPrinter" // ACW 3/15/21 WIN-104
 	,L"sys_SetDefPrinter" // ACW 3/15/21 WIN-120
+	,L"sys_SendRawPrinterData" // ACW 3/15/21 WIN-86
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -146,6 +147,11 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 		case 17: // sys_SetDefPrinter
 			// ACW 3/15/21 WIN-120
 			sys_SetDefPrinter(params);
+			break;
+
+		case 18: // sys_SendRawPrinterData
+			// ACW 3/15/21 WIN-108
+			sys_SendRawPrinterData(params);
 			break;
 
 	}	

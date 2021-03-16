@@ -64,8 +64,12 @@
       "syntax": "sys_GetDefPrinter(&T):L",
       "theme": "Win64API Commands"
     },
-     {
+    {
       "syntax": "sys_SetDefPrinter(&T):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_SendRawPrinterData(&T;&T):L",
       "theme": "Win64API Commands"
     }
   ],

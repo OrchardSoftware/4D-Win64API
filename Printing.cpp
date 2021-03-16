@@ -63,3 +63,64 @@ void sys_SetDefPrinter(PA_PluginParameters params)
 	PA_ReturnLong(params, PALReturnValue);
 }
 
+//----------------------------------------------------------------------
+//
+// FUNCTION:	sys_SendRawPrinterData
+//
+// PURPOSE:		Sends raw printer data directly to a printer. sys_PrintDirect2Driver
+//
+//
+// AMS 12/5/14 #37816
+//
+
+void sys_SendRawPrinterData(PA_PluginParameters params) {
+	PA_long32 PALReturnValue;
+	PA_Unistring *PAUPrinterName, *PAURawData;
+
+	BOOL bReturn;
+	DWORD dwJob = 0 , dwSize = 0, dwBytesWritten = 0;
+	DOC_INFO_1 DocInfo;
+	HANDLE hPrinter = NULL;
+
+	// Get the function parameters.
+	PAUPrinterName = PA_GetStringParameter(params, 1);
+	PAURawData = PA_GetStringParameter(params, 2);
+
+	dwSize = (DWORD) (sizeof(WCHAR) * (PAURawData->fLength + 1));
+
+	// Open a handle to the printer.
+	bReturn = OpenPrinter((LPWSTR) PAUPrinterName->fString, &hPrinter, NULL);
+	if (bReturn)
+	{
+		// Fill in the structure with info about this "document."
+		DocInfo = { L"My Document", NULL, L"RAW" };
+
+		// Inform the spooler the document is beginning.
+		dwJob = StartDocPrinter(hPrinter, 1, (LPBYTE)&DocInfo);
+		if (dwJob > 0) {
+			// Start a page.
+			bReturn = StartPagePrinter(hPrinter);
+			if (bReturn) {
+				// Send the data to the printer.
+				bReturn = WritePrinter(hPrinter, (LPVOID) PAURawData->fString, dwSize, &dwBytesWritten);
+				EndPagePrinter(hPrinter);
+			}
+			// Inform the spooler that the document is ending.
+			EndDocPrinter(hPrinter);
+		}
+		// Close the printer handle.
+		ClosePrinter(hPrinter);
+	}
+
+	// Check to see if correct number of bytes were written.
+	if (!bReturn || (dwBytesWritten != dwSize))
+	{
+		PALReturnValue = GetLastError();
+	}
+	else
+	{
+		PALReturnValue = 0;
+	}
+
+	PA_ReturnLong(params, PALReturnValue);
+}

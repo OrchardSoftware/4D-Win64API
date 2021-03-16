@@ -15,3 +15,4 @@
 
 void sys_GetDefPrinter(PA_PluginParameters params);
 void sys_SetDefPrinter(PA_PluginParameters params);
+void sys_SendRawPrinterData(PA_PluginParameters params);
