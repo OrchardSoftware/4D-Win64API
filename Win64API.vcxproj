@@ -234,6 +234,7 @@
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="Miscellaneous.cpp" />
     <ClCompile Include="Process.cpp" />
+    <ClCompile Include="Printing.cpp" />
     <ClCompile Include="Registry.cpp" />
     <ClCompile Include="Win64API.cpp" />
     <ClCompile Include="WindowManagement.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="Logging.h" />
     <ClInclude Include="Miscellaneous.h" />
     <ClInclude Include="Process.h" />
+    <ClInclude Include="Printing.h" />
     <ClInclude Include="Registry.h" />
     <ClInclude Include="Win64API.h" />
     <ClInclude Include="WindowManagement.h" />

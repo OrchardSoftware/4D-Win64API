@@ -1,17 +1,18 @@
 /* --------------------------------------------------------------------------------
 #
-#	Miscellaneous.h
+#	WindowManagement.h
 #
 #	Project : Win64API
 #	author : dwaddell
-#	2/23/2021
+#	10/26/2020
 #
 # --------------------------------------------------------------------------------*/
 
 #include "Defines.h"
 #include "windows.h"
 
-// Published methods
-void sys_PlayWav(PA_PluginParameters params);
-void sys_GetUTCOffset(PA_PluginParameters params);
-void gui_SelectColor(PA_PluginParameters params);
+#pragma once
+
+void sys_GetDefPrinter(PA_PluginParameters params);
+void sys_SetDefPrinter(PA_PluginParameters params);
+void sys_SendRawPrinterData(PA_PluginParameters params);
