@@ -9,6 +9,7 @@
     <ClCompile Include="WindowManagement.cpp" />
     <ClCompile Include="Miscellaneous.cpp" />
     <ClCompile Include="Logging.cpp" />
+    <ClCompile Include="Process.cpp" />
     <ClCompile Include="Printing.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +34,7 @@
     <ClInclude Include="WindowManagement.h" />
     <ClInclude Include="Miscellaneous.h" />
     <ClInclude Include="Logging.h" />
+    <ClInclude Include="Process.h" />
     <ClInclude Include="Printing.h" />
   </ItemGroup>
   <ItemGroup>

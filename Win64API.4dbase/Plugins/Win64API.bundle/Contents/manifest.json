@@ -71,6 +71,22 @@
     {
       "syntax": "sys_SendRawPrinterData(&T;&T):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_KillProcessByName(&T;&L;&L):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_IsAppLoaded(&T):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_ShellExecute(&T;&T;&T;&T;&L):T",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_GetUTCOffset(&L):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,

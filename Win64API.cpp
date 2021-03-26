@@ -15,12 +15,13 @@
 #include "WindowManagement.h"
 #include "Miscellaneous.h"
 #include "Logging.h"
+#include "Process.h"
 #include "Printing.h"
 
 const wchar_t* const win32Commands[] = {
 	L"sys_GetRegEnum"
-	,L"sys_GetRegText" // ACW 10/20/20 WIN-78 
 	,L"sys_GetRegLongint" // ACW 10/16/20 WIN-80
+	,L"sys_GetRegText" // ACW 10/20/20 WIN-78 
 	,L"gui_SetWindowTitleEx" // ACW 10/28/20 WIN-108
 	,L"gui_SetIconEX" // ACW 1/8/21 WIN-113
 	,L"gui_GetWindowStateEx" // ACW 1/11/21 WIN-109
@@ -36,6 +37,10 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_GetDefPrinter" // ACW 3/15/21 WIN-104
 	,L"sys_SetDefPrinter" // ACW 3/15/21 WIN-120
 	,L"sys_SendRawPrinterData" // ACW 3/15/21 WIN-86
+	,L"sys_KillProcessByName" // JEM 3/16/21 WIN-96
+	,L"sys_IsAppLoaded" // JEM 3/17/21 WIN-77
+	,L"sys_ShellExecute" // JEM 3/18/21 WIN-84
+	,L"sys_GetUTCOffset" // JEM 3/18/21 WIN-121
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -43,7 +48,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 
 	WCHAR *wCommandID;
 
-	if ((selector > 0) && (selector < NUM_COMMANDS)) { // WJF 7/11/16 Win-20 200 -> NUM_COMMANDS, <= -> <
+	if ((selector > 0) && (selector <= NUM_COMMANDS)) { // WJF 7/11/16 Win-20 200 -> NUM_COMMANDS, <= -> <  // This should be less than or equal since 4D is 1 based and C is zero based
 		size_t bufferSize = (5 + wcslen(win32Commands[selector - 1]));
 		wCommandID = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);		
 		
@@ -118,7 +123,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			// ACW 3/4/21 WIN-76
 			sys_LoggingStop(params);
 			break;
-      
+
 		case 12: // sys_SetRegLongint
 			// ACW 3/8/21 WIN-97
 			sys_SetRegKey(params, selector); 
@@ -135,26 +140,46 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case 15: // gui_SelectColor
-			// ACW 3/11/21 WIN-118
+				 // ACW 3/11/21 WIN-118
 			gui_SelectColor(params);
 			break;
-			
+
 		case 16: // sys_GetDefPrinter
-			// ACW 3/15/21 WIN-104
+				 // ACW 3/15/21 WIN-104
 			sys_GetDefPrinter(params);
 			break;
 
 		case 17: // sys_SetDefPrinter
-			// ACW 3/15/21 WIN-120
+				 // ACW 3/15/21 WIN-120
 			sys_SetDefPrinter(params);
 			break;
 
 		case 18: // sys_SendRawPrinterData
-			// ACW 3/15/21 WIN-108
+				 // ACW 3/15/21 WIN-108
 			sys_SendRawPrinterData(params);
 			break;
 
-	}	
+		case 19: // sys_KillProcessByName
+			// JEM 3/16/21 WIN-96
+			sys_KillProcessByName(params);
+			break;
+
+		case 20: // sys_IsAppLoaded
+				 // JEM 3/17/21 WIN-96
+			sys_IsAppLoaded(params);
+			break;
+
+		case 21: // sys_ShellExecute
+				 // JEM 3/18/21 WIN-84
+			sys_ShellExecute(params);
+			break;
+
+		case 22: // sys_GetUTCOffset
+				 // JEM 3/18/21 WIN-121
+			sys_GetUTCOffset(params);
+			break;
+			
+	}
 }
 
 void InitPlugin()
