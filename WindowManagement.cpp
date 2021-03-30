@@ -245,3 +245,347 @@ void gui_SetWindowLongEx(PA_PluginParameters params)
 
 	PA_ReturnLong(params, PALReturnValue);
 }
+
+HWND hBackground;
+BOOL CALLBACK FindBackgroundHWND (HWND hwnd, LPARAM lparam) {
+	WCHAR szClassName[256] = L"";
+	int size = 256;
+
+	GetClassName(hwnd, szClassName, size);
+	
+	_wcslwr_s(szClassName, size); // ZRW 4/12/17 WIN-39 
+
+	if (wcscmp(szClassName, L"mdiclient") == 0) {
+		hBackground = hwnd;
+		return FALSE;
+	}
+	else {
+		return TRUE;
+	}
+}
+
+// ------------------------------------------------
+//
+//  FUNCTION: gui_LoadBackground( PA_PluginParameters params )
+//
+//  PURPOSE:	Loads a bitmap as a background for 4D window.
+//
+//  COMMENTS:	May be scaled or tiled.  Bitmap must be of suffient size
+//				for scaling so it does not appear blocky.  Tiled Bitmaps
+//				should have edges that transition nicely from one to another.
+//
+//	DATE:		dcc 11/09/01
+//
+void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
+{
+	PA_Unistring* PAUBackgroundPath;
+	PA_long32 PALTileOrScale, PALReturnValue;
+	
+	static LONG_PTR	lLastTileOrScale = 0;
+	static HWND hWindow = 0;
+	static WCHAR *wLastBackgroundPath;
+
+	size_t bufferSize;
+	BOOL bFuncReturn;
+	HBITMAP hBitmap;
+	WPARAM wParam = 0;
+	LPARAM lParam = 0;
+	RECT rect;
+	WCHAR *wCompare;
+
+	if (DeInit) {
+		if (hWindow != 0) {
+			bFuncReturn = SendNotifyMessage(hWindow, (WM_USER + 0x0031), wParam, lParam);
+		}
+		return;
+	}
+
+	PALReturnValue = 0;
+	PAUBackgroundPath = PA_GetStringParameter(params, 1);
+	PALTileOrScale = PA_GetLongParameter(params, 2);
+
+	switch (PALTileOrScale)
+	{
+		case 0:  // Assume tiled if no param
+			PALTileOrScale = BM_TILE;
+
+			// ACW 3/26/21 TODO DO we need this?
+			//if (g_bDragFull) { // Reset to original style if changing from scaled to tiled
+			//	SystemParametersInfo(SPI_SETDRAGFULLWINDOWS, g_bDragFull, NULL, 0);
+			//}
+
+			break;
+
+		case BM_SCALE:
+			// Set so window NOT repainted until AFTER resized -- not during resizing
+			// bFuncReturn = SystemParametersInfo(SPI_SETDRAGFULLWINDOWS, FALSE, NULL, 0); // 1/8/04 no longer change the system preference.
+			break;
+
+		case BM_SCALETOMAXCLIENT:
+			// This causes bitmap to be scaled to maximum client size
+			break;
+	}
+
+	// If a background has been displayed
+	if (hWindow != 0) {
+		if (PAUBackgroundPath->fLength == 0) {
+			wCompare = L"";
+		}
+		else {
+			wCompare = (WCHAR*) PAUBackgroundPath->fString;
+		}
+		
+		// If its the same bitmap and format as this call don't do it again
+		if ((wcscmp(wCompare, wLastBackgroundPath) == 0) && (PALTileOrScale == lLastTileOrScale)) { // This is the same bitmap as before
+			PA_ReturnLong(params, 1);
+			return;
+		}
+
+		// If we're here it's a different bitmap or format release current background
+		bFuncReturn = SendNotifyMessage(hWindow, (WM_USER + 0x0031), wParam, lParam);
+		bFuncReturn = GetClientRect(hWindow, &rect);
+		bFuncReturn = InvalidateRect(hWindow, &rect, TRUE);
+
+		// If there's no bitmap provided, return & clear
+		if (PAUBackgroundPath->fLength == 0) {
+			PA_ReturnLong(params, 1);
+			hWindow = NULL;
+			
+			bufferSize = 1;
+			wLastBackgroundPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
+			wcscpy_s(wLastBackgroundPath, bufferSize, L"");
+			lLastTileOrScale = 0;
+			return;
+		}
+	}
+	
+	// Find where the backgfound image should go
+	hBackground = NULL;
+	EnumChildWindows(MDI::getWindowHWND(Win64_MDI_WinRef), (WNDENUMPROC) FindBackgroundHWND, NULL);
+		
+	// Make sure we found the background window handle
+	if (hBackground == NULL) {
+		PA_ReturnLong(params, 2);
+		return;
+	}
+	else {
+		hWindow = hBackground;
+	}	
+	
+	hBitmap = (HBITMAP) LoadImage (0, (LPCWSTR)PAUBackgroundPath->fString, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	if (hBitmap == NULL) {
+		PALReturnValue = 0;
+	}
+	else {
+
+		lParam = (LPARAM) hBitmap;
+		
+		//returnValue = lParam;
+		PALReturnValue = 1;
+
+		wParam = PALTileOrScale;
+
+		// REB 3/18/11 #25290
+		// WJF 6/24/16 Win-21 Switch casting around
+		g_wpOrigMDIProc = (WNDPROC) SetWindowLongPtr(hWindow, GWLP_WNDPROC, (LONG_PTR)BkgrndProc); 
+																							   
+		if (g_wpOrigMDIProc != 0) {
+			bFuncReturn = SendNotifyMessage(hWindow, (WM_USER + 0x0030), wParam, lParam);
+			bFuncReturn = GetClientRect(hWindow, &rect);
+			bFuncReturn = InvalidateRect(hWindow, &rect, TRUE);
+			
+			bufferSize = PAUBackgroundPath->fLength + 1;
+			wLastBackgroundPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
+			wcscpy_s(wLastBackgroundPath, bufferSize, (WCHAR*)PAUBackgroundPath->fString);
+
+			lLastTileOrScale = PALTileOrScale;			
+		}
+		else {
+			PALReturnValue = 0;
+		}
+	}
+
+	PA_ReturnLong(params, PALReturnValue);
+}
+
+
+
+//  FUNCTION: scaleImage(HDC hdc, HDC hdcMem, HBITMAP hOrigBitmap, INT_PTR width, INT_PTR height)
+//
+//  PURPOSE:  Scale a bitmap to the desired dimensions.
+//
+//  COMMENTS:
+//
+//	DATE: MJG 12/19/03
+//
+// WJF 6/30/16 Win-21 INT_PTR -> INT
+HGDIOBJ scaleImage(HDC hdc, HDC hdcMem, HBITMAP hOrigBitmap, INT width, INT height)
+{
+	BITMAP origBitmap, scaledBitmap;
+	HBITMAP hScaledBitmap;
+	HDC	hdcOrigBitmap;
+	HGDIOBJ returnObject;
+
+	GetObject(hOrigBitmap, sizeof(BITMAP), &origBitmap);
+
+	hdcOrigBitmap = CreateCompatibleDC(hdc);
+
+	scaledBitmap = origBitmap;
+	scaledBitmap.bmWidth = width;
+	scaledBitmap.bmHeight = height;
+	scaledBitmap.bmWidthBytes = ((scaledBitmap.bmWidth + 15) / 16) * 2;
+
+	hScaledBitmap = CreateCompatibleBitmap(hdc, width, height);
+	SelectObject(hdcOrigBitmap, hOrigBitmap);
+	returnObject = SelectObject(hdcMem, hScaledBitmap);
+
+	StretchBlt(hdcMem, 0, 0, width, height, hdcOrigBitmap, 0, 0, origBitmap.bmWidth, origBitmap.bmHeight, SRCCOPY);
+	DeleteDC(hdcOrigBitmap);
+
+	return returnObject;
+}
+
+//  FUNCTION: tileImage(HDC hdc, HDC hdcMem, HBITMAP hOrigBitmap, INT_PTR width, INT_PTR height)
+//
+//  PURPOSE:  Tile a bitmap to the desired dimensions.
+//
+//  COMMENTS:
+//
+//	DATE: MJG 12/19/03
+//
+// WJF 6/30/16 Win-21 INT_PTR -> INT
+HGDIOBJ tileImage(HDC hdc, HDC hdcMem, HBITMAP hOrigBitmap, INT width, INT height)
+{
+	BITMAP origBitmap;
+	HBITMAP htiledBitmap;
+	HDC	hdcOrigBitmap;
+	HGDIOBJ returnObject;
+	INT x, y; // WJF 6/30/16 Win-21 INT_PTR -> INT
+
+	GetObject(hOrigBitmap, sizeof(BITMAP), &origBitmap);
+
+	hdcOrigBitmap = CreateCompatibleDC(hdc);
+
+	htiledBitmap = CreateCompatibleBitmap(hdc, width, height);
+
+	SelectObject(hdcOrigBitmap, hOrigBitmap);
+	returnObject = SelectObject(hdcMem, htiledBitmap);
+
+	for (y = 0; y < height; y += origBitmap.bmHeight)
+		for (x = 0; x < width; x += origBitmap.bmWidth)
+			BitBlt(hdcMem, x, y, origBitmap.bmWidth, origBitmap.bmHeight, hdcOrigBitmap, 0, 0, SRCCOPY);
+
+	DeleteDC(hdcOrigBitmap);
+	return returnObject;
+}
+
+//  FUNCTION: BkgrndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+//
+//  PURPOSE:	subclassed window procedure
+//
+//  COMMENTS:
+//
+//	DATE:			dcc 11/09/01
+//
+//  MODIFICATIONS:  MJG 12/19/03 Improved efficiency when drawing background.
+//
+LRESULT APIENTRY BkgrndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	static INT cxClient, cyClient; // WJF 6/30/16 Win-21 INT_PTR -> INT
+	static HBITMAP hOrigBitmap;
+	static BITMAP origBitmap;
+	static HDC hdcMem, hdc;
+	static RECT	clientRect; //dcc 12/14
+	static INT  fullClientWidth, fullClientHeight; // WJF 6/30/16 Win-21 LONG_PTR -> INT
+	static HGDIOBJ oldObject;
+	PAINTSTRUCT	ps;
+	RECT rect;
+	INT x, y; // WJF 6/30/16 Win-21 INT_PTR -> INT
+
+	switch (uMsg)
+	{
+	case (WM_USER + 0x0030): // initial setup -- passing bitmap hndl and tileOrScale
+							 // tileOrScale = wParam; // WJF 6/30/16 Win-21 For what purpose
+		hOrigBitmap = (HBITMAP) lParam;
+		GetObject(hOrigBitmap, sizeof(BITMAP), &origBitmap);
+		hdc = GetDC(hwnd);
+		hdcMem = CreateCompatibleDC(hdc);
+
+		switch (wParam) { // WJF 6/30/16 Win-21 tileOrScale -> wParam
+		case BM_SCALE:
+			GetClientRect(hwnd, &clientRect);
+			fullClientWidth = clientRect.right;
+			fullClientHeight = clientRect.bottom;
+			oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
+			break;
+		case BM_SCALETOMAXCLIENT:
+			fullClientWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+			fullClientHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+			oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
+			break;
+		case BM_TILE:
+			fullClientWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+			fullClientHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+			oldObject = tileImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
+			break;
+		}
+		break;
+
+	case WM_SIZE:
+
+		if (wParam == BM_SCALE) { // WJF 6/30/16 Win-21 tileOrScale -> wParam
+			cxClient = LOWORD(lParam);
+			cyClient = HIWORD(lParam);
+
+			if (((fullClientWidth != cxClient) || (fullClientHeight != cyClient))
+				&& (cxClient != 0 && cyClient != 0)) {
+				fullClientWidth = cxClient;
+				fullClientHeight = cyClient;
+				DeleteObject(SelectObject(hdcMem, oldObject));
+				oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, cxClient, cyClient);
+				InvalidateRect(hwnd, &clientRect, FALSE);
+				return 1;
+			}
+		}
+
+	case WM_PAINT:
+
+		GetUpdateRect(hwnd, &rect, TRUE);
+		cxClient = rect.right;
+		cyClient = rect.bottom;
+
+		BeginPaint(hwnd, &ps);
+
+		if (cyClient < fullClientHeight && cxClient < fullClientWidth)
+			BitBlt(hdc, 0, 0, cxClient, cyClient, hdcMem, 0, 0, SRCCOPY);
+		else
+			for (y = 0; y < cyClient; y += fullClientHeight)
+				for (x = 0; x < cxClient; x += fullClientWidth)
+				{
+					BitBlt(hdc, x, y, fullClientWidth, fullClientHeight, hdcMem, 0, 0, SRCCOPY);
+				}
+
+		EndPaint(hwnd, &ps);
+
+		return 1; // return immediately - don't let orig window proc repaint
+
+	case (WM_USER + 0x0031):
+
+		ReleaseDC(hwnd, hdc);
+		DeleteObject(SelectObject(hdcMem, oldObject));
+		DeleteDC(hdcMem);
+		DeleteObject(hOrigBitmap);
+		// tileOrScale = 0; // WJF 6/30/16 Win-21 Removed
+		fullClientWidth = 0;
+		fullClientHeight = 0;
+		cxClient = 0;
+		cyClient = 0;
+		// REB 3/18/11 #25290
+		SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)g_wpOrigMDIProc);
+		//SetWindowLong(hwnd, GWL_WNDPROC, (LONG) g_wpOrigMDIProc);
+
+		break;
+	}
+
+	return CallWindowProc(g_wpOrigMDIProc, hwnd, uMsg, wParam, lParam);
+}

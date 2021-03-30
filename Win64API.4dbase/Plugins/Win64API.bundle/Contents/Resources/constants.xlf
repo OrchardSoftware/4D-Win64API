@@ -28,6 +28,24 @@
     </trans-unit>
   </group>
 
+  <group id="118" restype="x-4DK#">
+    <trans-unit id="119">
+      <source>WINAPI_BitMap</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="120">
+      <source>BM_TILE</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="121">
+      <source>BM_SCALE</source>
+    </trans-unit>
+    <trans-unit d4:value="" id="122">
+      <source>BM_CLOSE</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="123">
+      <source>BM_SCALETOMAXCLIENT</source>
+    </trans-unit>
+  </group>
+
   <group id="213" restype="x-4DK#">
     <trans-unit id="214">
       <source>WINAPI_Misc</source>

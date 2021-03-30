@@ -87,6 +87,10 @@
     {
       "syntax": "sys_GetUTCOffset(&L):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "gui_LoadBackground(&T;&L):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
