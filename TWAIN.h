@@ -1,18 +1,19 @@
 /* --------------------------------------------------------------------------------
 #
-#	Printing.h
+#	TWAIN.h
 #
 #	Project : Win64API
 #	author : dwaddell
-#	3/15/2021
+#	4/1/2021
 #
 # --------------------------------------------------------------------------------*/
 
 #include "Defines.h"
 #include "windows.h"
+#include "stdio.h"
 
 #pragma once
 
-void sys_GetDefPrinter(PA_PluginParameters params);
-void sys_SetDefPrinter(PA_PluginParameters params);
-void sys_SendRawPrinterData(PA_PluginParameters params);
+void TWAIN_GetSources(PA_PluginParameters params); //REB 6/23/09 #14151
+//void TWAIN_SetSource(PA_PluginParameters params); // REB 6/23/09 #14151
+//void TWAIN_AcquireImage(PA_PluginParameters params); // REB 6/23/09 #14151

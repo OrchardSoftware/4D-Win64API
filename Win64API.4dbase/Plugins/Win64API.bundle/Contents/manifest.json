@@ -87,6 +87,10 @@
     {
       "syntax": "sys_GetUTCOffset(&L):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "TWAIN_GetSources(&Y;&L;&L):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
