@@ -91,6 +91,10 @@
     {
       "syntax": "TWAIN_GetSources(&Y;&L;&L):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "TWAIN_SetSource(&T):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,

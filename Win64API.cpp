@@ -184,7 +184,13 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 			
 		case 23: // TWAIN_GetSources
+			// ACW 4/1/21 WIN-119
 			TWAIN_GetSources(params);
+			break;
+
+		case 24: // TWAIN_SetSource
+			// ACW 4/5/21 WIN-119
+			TWAIN_SetSource(params);
 			break;
 
 	}

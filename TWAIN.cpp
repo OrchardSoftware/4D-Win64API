@@ -11,7 +11,7 @@
 #include "TWAIN.h"
 
 WCHAR wc4DXPath[MAXBUF];
-//char pathName[512]; // MWD 10/21/05 #9246 holds path to Win32API.4DX
+WCHAR* wcTwainSource;
 
 // MWD 10/21/05 #9246
 // Use the DllMain function to get the path to the calling DLL and store it in a global for further use.
@@ -35,7 +35,6 @@ extern "C" __declspec(dllexport) {
 // Note, this does not need to use the semaphore since it is already waiting on a file
 void TWAIN_GetSources(PA_PluginParameters params)
 {
-	PA_Unistring PAUAppPath;
 	PA_Variable PAVSources;
 	PA_long32 PALReturnValue, PALDoNotAddSuffix, PALFlags;
 	
@@ -234,3 +233,38 @@ void TWAIN_GetSources(PA_PluginParameters params)
 	PA_SetVariableParameter(params, 1, PAVSources, 0);
 	PA_ReturnLong(params, PALReturnValue);
 }
+
+
+
+
+void TWAIN_SetSource(PA_PluginParameters params)
+{
+	PA_long32 PALReturnValue;
+	PA_Unistring *PAUSourceName;
+	
+	PAUSourceName = PA_GetStringParameter(params, 1);
+	
+	PALReturnValue = 1;
+
+	// WJF 9/11/15 #43727 Begin changes
+	if (wcTwainSource) { // If we've already set a source, clear it
+		free(wcTwainSource);
+
+		wcTwainSource = NULL;
+	}
+		
+	// WJF 7/13/16 Win-21 Removed typecasting on malloc to follow C best practices
+	size_t bufferSize = (1 + PAUSourceName->fLength);
+	wcTwainSource = (WCHAR*) malloc(sizeof(WCHAR) * bufferSize);
+		
+	// WJF 9/29/15 Added a check to see if it was actually allocated and a new error code
+	if (wcTwainSource) {
+		wcscpy_s(wcTwainSource, bufferSize, (WCHAR*) PAUSourceName->fString);
+	}
+	else {
+		PALReturnValue = 0;
+	}
+
+	PA_ReturnLong(params, PALReturnValue);
+}
+
