@@ -84,8 +84,8 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 	WCHAR* pos;
 	pos = wcsrchr(WCPluginPath, L'\\');
-	//pos = L'\0'; // THIS ISN'T DOING ANYTHING
-//	pos = NULL;
+	// pos = L'\0'; // THIS ISN'T DOING ANYTHING
+	// pos = NULL;
 
 	WCPluginPath[wcslen(WCPluginPath) - wcslen(pos)] = L'\0';
 
@@ -130,12 +130,14 @@ void TWAIN_GetSources(PA_PluginParameters params)
 													// do nothing
 				}
 				else { // Valid Product Name
+					pos = wcsrchr(source, L'\n');
+					source[wcslen(source) - wcslen(pos)] = L'\0';
 					//pos = strrchr(source, '\n');
 					//strcpy_s(pos, MAX_PATH, "\0");  // ZRW 3/22/17 WIN-39 256 -> MAX_PATH
 
 					if (!PALDoNotAddSuffix) // WJF 10/27/16 Win-41 Do not add suffix if this is TRUE
 					{
-						wcscat_s(source, MAX_PATH, L"-TWAIN"); // WJF 9/21/15 #43940  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
+						wcscat_s(source, 256, L"-TWAIN"); // WJF 9/21/15 #43940  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
 					}
 
 					PA_ResizeArray(&PAVSources, index);
@@ -188,12 +190,19 @@ void TWAIN_GetSources(PA_PluginParameters params)
 			if (fp) {
 				while (fgetws(source, 256, fp) != NULL) {
 					if (wcscmp(source, L"") != 0) {
+						pos = wcsrchr(source, L'\n');
+						source[wcslen(source) - wcslen(pos)] = L'\0';
+						//wcscpy_s(pos, MAX_PATH, L'\0');
+
+
 						//pos = strrchr(source, '\n');
 						//strcpy_s(pos, MAX_PATH, "\0");  // ZRW 3/22/17 WIN-39 256 -> MAX_PATH
 
 						if (!PALDoNotAddSuffix) // WJF 10/27/16 Win-41 Do not add suffix if this is TRUE
 						{
-							wcscat_s(source, MAX_PATH, L"-WIA");
+							//wcscat_s(source, MAX_PATH, L"-WIA");
+							wcscat_s(source, 256, L"-WIA");
+							
 							//strcat_s(source, sizeof(source), "-WIA");  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
 						}
 
@@ -202,6 +211,7 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 						PA_Unistring paSource = PA_CreateUnistring((PA_Unichar*)source);
 						PA_SetStringInArray(PAVSources, index, &paSource);
+
 						//PA_ResizeArray(&atSources, index);
 						//PA_SetTextInArray(atSources, index, source, strlen(source));
 
