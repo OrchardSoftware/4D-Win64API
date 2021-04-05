@@ -84,7 +84,10 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 	WCHAR* pos;
 	pos = wcsrchr(WCPluginPath, L'\\');
-	pos = L"\0"; // THIS ISN'T DOING ANYTHING
+	//pos = L'\0'; // THIS ISN'T DOING ANYTHING
+//	pos = NULL;
+
+	WCPluginPath[wcslen(WCPluginPath) - wcslen(pos)] = L'\0';
 
 	wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
 
@@ -157,57 +160,66 @@ void TWAIN_GetSources(PA_PluginParameters params)
 		PALReturnValue = -1;
 	}
 
-	//if (!(flags & TW_FLAG_EXCLUDE_WIA)) { // SDL 10/3/17 WIN-51 Option to include WIA drivers (default)
-	//	GetTempPath(MAX_PATH, filePath);
+	if (!(PALFlags & TW_FLAG_EXCLUDE_WIA)) { // SDL 10/3/17 WIN-51 Option to include WIA drivers (default)
+		GetTempPath(MAX_PATH, filePath);
 
-	//	strcat_s(filePath, sizeof(filePath), "wiaSources.txt");  // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(filePath)
+		wcscat_s(filePath, MAX_PATH, L"wiaSources.txt");
+		//strcat_s(filePath, sizeof(filePath), "wiaSources.txt");  // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(filePath)
 
-	//	strcpy_s(lpParameters, sizeof(lpParameters), "-ws");  // ZRW 3/22/17 WIN-39 16 -> sizeof(lpParameters)
+		wcscpy_s(lpParameters, 16, L"-ws");
+		// strcpy_s(lpParameters, sizeof(lpParameters), "-ws");  // ZRW 3/22/17 WIN-39 16 -> sizeof(lpParameters)
 
-	//	utilities.hProcess = NULL;
-	//	utilities.lpParameters = lpParameters;
+		utilities.hProcess = NULL;
+		utilities.lpParameters = lpParameters;
 
-	//	if (ShellExecuteEx(&utilities)) {
-	//		PA_YieldAbsolute();
-	//		PA_YieldAbsolute();
-	//		PA_YieldAbsolute();
+		if (ShellExecuteEx(&utilities)) {
+			PA_YieldAbsolute();
+			PA_YieldAbsolute();
+			PA_YieldAbsolute();
 
-	//		do {
-	//			bSuccess = GetExitCodeProcess(utilities.hProcess, &dwExitCode);
-	//			PA_YieldAbsolute();
-	//		} while ((dwExitCode == STILL_ACTIVE) && (bSuccess));
+			do {
+				bSuccess = GetExitCodeProcess(utilities.hProcess, &dwExitCode);
+				PA_YieldAbsolute();
+			} while ((dwExitCode == STILL_ACTIVE) && (bSuccess));
 
-	//		//fp = fopen(filePath, "r");
-	//		fopen_s(&fp, filePath, "r");  // ZRW 4/13/17 WIN-39 Using the more secure method
+			
+			_wfopen_s(&fp, filePath, L"r");  // ZRW 4/13/17 WIN-39 Using the more secure method
 
-	//		if (fp) {
-	//			while (fgets(source, 256, fp) != NULL) {
-	//				if (strcmp(source, "") != 0) {
-	//					pos = strrchr(source, '\n');
-	//					strcpy_s(pos, MAX_PATH, "\0");  // ZRW 3/22/17 WIN-39 256 -> MAX_PATH
+			if (fp) {
+				while (fgetws(source, 256, fp) != NULL) {
+					if (wcscmp(source, L"") != 0) {
+						//pos = strrchr(source, '\n');
+						//strcpy_s(pos, MAX_PATH, "\0");  // ZRW 3/22/17 WIN-39 256 -> MAX_PATH
 
-	//					if (!bDoNotAddSuffix) // WJF 10/27/16 Win-41 Do not add suffix if this is TRUE
-	//					{
-	//						strcat_s(source, sizeof(source), "-WIA");  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
-	//					}
+						if (!PALDoNotAddSuffix) // WJF 10/27/16 Win-41 Do not add suffix if this is TRUE
+						{
+							wcscat_s(source, MAX_PATH, L"-WIA");
+							//strcat_s(source, sizeof(source), "-WIA");  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
+						}
 
-	//					PA_ResizeArray(&atSources, index);
-	//					PA_SetTextInArray(atSources, index, source, strlen(source));
-	//					++index;
-	//				}
-	//			}
 
-	//			fclose(fp);
+						PA_ResizeArray(&PAVSources, index);
 
-	//			fp = NULL;
-	//		}
+						PA_Unistring paSource = PA_CreateUnistring((PA_Unichar*)source);
+						PA_SetStringInArray(PAVSources, index, &paSource);
+						//PA_ResizeArray(&atSources, index);
+						//PA_SetTextInArray(atSources, index, source, strlen(source));
 
-	//		DeleteFile(filePath);
-	//	}
-	//	else {
-	//		returnValue = -2;
-	//	}
-	//}
+						++index;
+					}
+				}
+
+				fclose(fp);
+
+				fp = NULL;
+			}
+
+			DeleteFile(filePath);
+		}
+		else {
+			PALReturnValue = -2;
+		}
+	}
 
 	PA_SetVariableParameter(params, 1, PAVSources, 0);
 	PA_ReturnLong(params, PALReturnValue);
