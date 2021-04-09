@@ -39,29 +39,13 @@ void TWAIN_GetSources(PA_PluginParameters params)
 	PA_long32 PALReturnValue, PALDoNotAddSuffix, PALFlags;
 	
 	size_t bufferSize;
-	WCHAR *WCPluginPath;
+	WCHAR *WCPluginPath, *WCToCharInBuffer;
 	WCHAR filePath[MAX_PATH] = L"", lpParameters[16] = L"-S", source[256] = L"";
 	SHELLEXECUTEINFO utilities;
 	DWORD dwExitCode = 0, index = 1;
 	BOOL bSuccess = FALSE;
 	FILE *fp = NULL;
-	//LONG				returnValue, debug; // WJF 6/30/21 Win-21 LONG_PTR -> LONG
-	//DWORD				index = 1;
-	//PA_Variable			atSources;
-	//// TW_IDENTITY			NewSourceId; // WJF 9/14/15 #43727 Removed
-	//char				lpParameters[16] = "-S"; // WJF 9/21/15 #43940 3 -> 16
-	//char				filePath[MAX_PATH] = "";
-	//BOOL				get64 = FALSE;
-	//FILE				*fp = NULL;
-	//char				source[256] = "";
-	//char				pluginPath[MAX_PATH] = "";
-	//char				*pos = NULL;
-	//SHELLEXECUTEINFO	utilities;
-	//DWORD				dwExitCode = 0;
-	//BOOL				bSuccess = FALSE;
-	//BOOL				bDoNotAddSuffix = FALSE; // WJF 10/27/16 Win-41
-	//LONG				flags = 0x0000; // SDL 10/3/17 WIN-51 "optional" parameter. Include WIA by default and create room for future flags // SDL 1/31/18 H-9141 UNLONG -> LONG
-
+	
 	PAVSources = PA_GetVariableParameter(params, 1);
 	PA_ResizeArray(&PAVSources, 0);
 
@@ -71,23 +55,16 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 	PALReturnValue = 1;
 
-
-
-	
-	//// WJF 9/11/15 #43727 Begin changes
-
 	bufferSize = (25 + wcslen(wc4DXPath));
 	WCPluginPath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
 
 	wcscpy_s(WCPluginPath, bufferSize, wc4DXPath);
-
-	WCHAR* pos;
-	pos = wcsrchr(WCPluginPath, L'\\');
-	// pos = L'\0'; // THIS ISN'T DOING ANYTHING
-	// pos = NULL;
-
-	WCPluginPath[wcslen(WCPluginPath) - wcslen(pos)] = L'\0';
-
+		
+	WCToCharInBuffer = wcsrchr(WCPluginPath, L'\\');
+	if (WCToCharInBuffer != NULL) {
+		WCToCharInBuffer[0] = NULL;
+	}
+		
 	wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
 
 	GetTempPath(MAX_PATH, filePath);
@@ -96,7 +73,7 @@ void TWAIN_GetSources(PA_PluginParameters params)
 	utilities.cbSize = sizeof(SHELLEXECUTEINFO);
 	utilities.fMask = SEE_MASK_NOCLOSEPROCESS;
 	utilities.hInstApp = NULL;
-	utilities.hwnd = (HWND)PA_GetMainWindowHWND(); //windowHandles.fourDhWnd;
+	utilities.hwnd = (HWND)PA_GetMainWindowHWND(); 
 	utilities.lpFile = WCPluginPath;
 	utilities.lpParameters = lpParameters;
 	utilities.lpDirectory = NULL;
@@ -129,11 +106,11 @@ void TWAIN_GetSources(PA_PluginParameters params)
 													// do nothing
 				}
 				else { // Valid Product Name
-					pos = wcsrchr(source, L'\n');
-					source[wcslen(source) - wcslen(pos)] = L'\0';
-					//pos = strrchr(source, '\n');
-					//strcpy_s(pos, MAX_PATH, "\0");  // ZRW 3/22/17 WIN-39 256 -> MAX_PATH
-
+					WCToCharInBuffer = wcsrchr(source, L'\n');
+					if (WCToCharInBuffer != NULL) {
+						WCToCharInBuffer[0] = NULL;
+					}
+					
 					if (!PALDoNotAddSuffix) // WJF 10/27/16 Win-41 Do not add suffix if this is TRUE
 					{
 						wcscat_s(source, 256, L"-TWAIN"); // WJF 9/21/15 #43940  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
@@ -143,8 +120,6 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 					PA_Unistring paSource = PA_CreateUnistring((PA_Unichar*)source);
 					PA_SetStringInArray(PAVSources, index, &paSource);
-
-					//PA_SetTextInArray(atSources, index, source, strlen(source));
 
 					++index;
 				}
@@ -189,30 +164,20 @@ void TWAIN_GetSources(PA_PluginParameters params)
 			if (fp) {
 				while (fgetws(source, 256, fp) != NULL) {
 					if (wcscmp(source, L"") != 0) {
-						pos = wcsrchr(source, L'\n');
-						source[wcslen(source) - wcslen(pos)] = L'\0';
-						//wcscpy_s(pos, MAX_PATH, L'\0');
-
-
-						//pos = strrchr(source, '\n');
-						//strcpy_s(pos, MAX_PATH, "\0");  // ZRW 3/22/17 WIN-39 256 -> MAX_PATH
+						WCToCharInBuffer = wcsrchr(source, L'\n');
+						if (WCToCharInBuffer != NULL) {
+							WCToCharInBuffer[0] = NULL;
+						}
 
 						if (!PALDoNotAddSuffix) // WJF 10/27/16 Win-41 Do not add suffix if this is TRUE
 						{
-							//wcscat_s(source, MAX_PATH, L"-WIA");
 							wcscat_s(source, 256, L"-WIA");
-							
-							//strcat_s(source, sizeof(source), "-WIA");  // ZRW 4/5/17 WIN-39 256 -> sizeof(source)
 						}
-
 
 						PA_ResizeArray(&PAVSources, index);
 
 						PA_Unistring paSource = PA_CreateUnistring((PA_Unichar*)source);
 						PA_SetStringInArray(PAVSources, index, &paSource);
-
-						//PA_ResizeArray(&atSources, index);
-						//PA_SetTextInArray(atSources, index, source, strlen(source));
 
 						++index;
 					}
@@ -230,6 +195,8 @@ void TWAIN_GetSources(PA_PluginParameters params)
 		}
 	}
 
+	free(WCPluginPath);
+
 	PA_SetVariableParameter(params, 1, PAVSources, 0);
 	PA_ReturnLong(params, PALReturnValue);
 }
@@ -241,7 +208,7 @@ void TWAIN_SetSource(PA_PluginParameters params)
 {
 	PA_long32 PALReturnValue;
 	PA_Unistring *PAUSourceName;
-	
+
 	PAUSourceName = PA_GetStringParameter(params, 1);
 	
 	PALReturnValue = 1;
@@ -268,3 +235,304 @@ void TWAIN_SetSource(PA_PluginParameters params)
 	PA_ReturnLong(params, PALReturnValue);
 }
 
+
+void TWAIN_AcquireImage(PA_PluginParameters params)
+{
+	PA_long32 PALReturnValue = 0, PALShowDialog, PALGetMultiple, PALwiaMode;
+	PA_Variable PAVBlobArray, PAVTWAINImageBlob;
+	
+	FILE *TWAINImageFilePointer;
+	size_t bufferSize;
+	DWORD indexInArray = 0;
+	WCHAR fileName[MAX_PATH] = L"", WCFileNameToBlob[MAX_PATH] = L"", WC4DCommand[256] =  L"";
+	WCHAR *WCToCharInBuffer;
+	TWAIN_CAPTURE TWAINCapture;
+	HANDLE CaptureThread;
+	UINT threadID = 0;
+
+	PALShowDialog = PA_GetLongParameter(params, 1);
+
+	//PAVBlobArray = PA_GetVariableParameter(params, 2);
+	PAVBlobArray = PA_CreateVariable(eVK_ArrayBlob);
+	PA_ResizeArray(&PAVBlobArray, indexInArray);
+
+	PALGetMultiple = PA_GetLongParameter(params, 3); // WJF 9/21/15 #43940
+
+	PALwiaMode = PA_GetLongParameter(params, 4); // WJF 9/21/15 #43940
+
+	GetTempPath(MAX_PATH, fileName);
+	wcscat_s(fileName, MAX_PATH, L"TWNIMG.bmp");
+
+	// Allow the image dialog to display if so desired.
+	// WJF 9/10/15 #43727 Changed to use a new variable instead of the EZTWAIN function
+	if (PALShowDialog) {
+		TWAINCapture.showUI = TRUE;
+	}
+	else {
+		TWAINCapture.showUI = FALSE;
+	}
+
+	// REB 2/26/13 #35165 Load our variables into the structure we can pass to the new thread
+	TWAINCapture.returnValue = 0;
+	// TWAINCapture.DIBHandle = DIBHandle; // WJF 9/10/15 #43727 Removed
+	TWAINCapture.done = FALSE;
+
+	TWAINCapture.get64 = 1; // WJF 9/10/15 #43727 // ACW 4/5/21 WIN-119 Hard-coded to 1 now
+
+	TWAINCapture.getMultiple = PALGetMultiple; // WJF 9/21/15 #43940
+
+	TWAINCapture.wiaMode = PALwiaMode; // WJF 9/21/15 #43940
+
+	TWAINCapture.numPictures = 1; // WJF 9/21/15 #43940 Default
+
+	TWAINCapture.filePath = fileName;
+
+	bufferSize = (1 + wcslen(fileName));
+	TWAINCapture.filePath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
+	wcscpy_s(TWAINCapture.filePath, bufferSize, fileName);
+		
+	// REB 2/26/13 #35165 Start a new thread to handle the image acquisition so that we can yield time
+	// back to 4D to prevent an application timeout.
+	CaptureThread = (HANDLE)_beginthreadex(NULL, 0, TWAIN_GetImage, &TWAINCapture, 0, &threadID);
+
+	// REB 2/26/13 #35165 4D says to call this at least three times when starting an external process.
+	// That's not exactly what we're doing but I'll err on the side of caution.
+	PA_YieldAbsolute();
+	PA_YieldAbsolute();
+	PA_YieldAbsolute();
+
+	// Yield time back to 4D until the capture is finished.
+	while (TWAINCapture.done == FALSE) {
+		PA_YieldAbsolute();
+	}
+
+	PALReturnValue = TWAINCapture.returnValue;
+
+	wcscpy_s(WCFileNameToBlob, MAX_PATH, fileName);
+	WCToCharInBuffer = wcsrchr(WCFileNameToBlob, L'.');
+	if (WCToCharInBuffer != NULL) {
+		WCToCharInBuffer[0] = NULL;
+	}
+	wcscat_s(WCFileNameToBlob, MAX_PATH, L"1.bmp");
+
+	if ((GetFileAttributes(WCFileNameToBlob) != INVALID_FILE_ATTRIBUTES) && (GetLastError() != ERROR_FILE_NOT_FOUND)) {
+
+		// TWAIN_WriteNativetoFilename returns 0 on success
+		if (PALReturnValue == 0) {
+			PALReturnValue = 1;
+
+			// WJF 9/21/15 #43940
+			for (int i = 0; i < TWAINCapture.numPictures; i++) {
+				// Increase our index
+				indexInArray++;
+
+				// If we are on a 2nd pass then we need to get a new file name
+				if (indexInArray > 1) {
+					wcscpy_s(WCFileNameToBlob, MAX_PATH, fileName);
+					WCToCharInBuffer = wcsrchr(WCFileNameToBlob, L'.');
+					if (WCToCharInBuffer != NULL) {
+						WCToCharInBuffer[0] = NULL;
+					}
+					wchar_t bufferExtension[10];
+					int j = swprintf_s(bufferExtension, 10, L"%d.bmp", indexInArray);
+					wcscat_s(WCFileNameToBlob, MAX_PATH, bufferExtension);
+				}
+							
+				_wfopen_s(&TWAINImageFilePointer, WCFileNameToBlob, L"rb");
+				fseek(TWAINImageFilePointer, 0, SEEK_END);
+				long filelen = ftell(TWAINImageFilePointer);
+				rewind(TWAINImageFilePointer);
+
+				char *buffer = (char *)malloc(filelen * sizeof(char)); // Enough memory for the file
+				fread(buffer, filelen, 1, TWAINImageFilePointer); // Read in the entire file
+				fclose(TWAINImageFilePointer); // Close the file
+				
+				// Create a blob variable and put it in the array we received as a parameter
+				PAVTWAINImageBlob = PA_CreateVariable(eVK_Blob);
+				PA_SetBlobVariable(&PAVTWAINImageBlob, buffer, filelen);
+				PA_ResizeArray(&PAVBlobArray, indexInArray);
+				PA_SetBlobInArray(PAVBlobArray, indexInArray, PAVTWAINImageBlob.uValue.fBlob);
+
+				// Delete the temp file
+				DeleteFile(WCFileNameToBlob);
+
+				// Free memory
+				free(buffer);
+			}
+
+		}
+	}
+	
+	if (TWAINCapture.filePath) {
+		free(TWAINCapture.filePath);
+		TWAINCapture.filePath = NULL;
+	}
+
+	PA_SetVariableParameter(params, 2, PAVBlobArray, 0);
+	PA_ReturnLong(params, PALReturnValue);
+
+}
+
+
+
+
+// REB 2/26/13 #35165 Intermediary method we can call as a new thread.
+unsigned __stdcall TWAIN_GetImage(void *arg)
+{
+	TWAIN_CAPTURE*	TWAINCapture;
+	WCHAR			iterator[16] = L"";
+	char			*pos = NULL;
+	WCHAR *WCToCharInBuffer = NULL;
+	BOOL			bContinue = TRUE;
+	WCHAR			filePath[MAX_PATH] = L"";
+	long			i = 0;
+
+	TWAINCapture = (TWAIN_CAPTURE*) arg;
+	// WJF 9/10/15 #43727 Removed
+	//TWAIN_UnloadSourceManager();  // REB 2/26/13 #35165 We have to reset our source before trying to acquire an image.
+	//TWAINCapture->DIBHandle = TWAIN_AcquireNative(NULL, TWAIN_ANYTYPE, &returnValue);
+
+	TWAINCapture->returnValue = OrchTwain_Get(TWAINCapture->filePath, TWAINCapture->showUI, TWAINCapture->wiaMode, TWAINCapture->getMultiple); // WJF 9/10/15 #43727 // WJF 9/21/15 #43940
+
+	if (TWAINCapture->getMultiple) {
+		while (bContinue) {
+			SetLastError(ERROR_SUCCESS);
+
+			i++;
+
+			wcscpy_s(filePath, MAX_PATH, TWAINCapture->filePath);
+			//strcpy_s(filePath, sizeof(filePath), TWAINCapture->filePath);  // ZRW 3/23/17 WIN-39 MAX_PATH -> sizeof(filePath)
+
+			WCToCharInBuffer = wcsrchr(filePath, L'.');
+			//pos = strrchr(filePath, '.');
+
+			_itow_s(i, iterator, 10);
+
+			if (WCToCharInBuffer != NULL) {
+				WCToCharInBuffer[0] = NULL;
+				//*WCToCharInBuffer = iterator;
+			}
+
+			
+			wcscat_s(filePath, MAX_PATH, iterator);
+			// strcpy_s(pos, MAX_PATH, iterator);
+
+			wcscat_s(filePath, MAX_PATH, L".bmp");
+			//strcat_s(filePath, sizeof(filePath), ".bmp");  // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(filePath)
+
+			if ((GetFileAttributes(filePath) == INVALID_FILE_ATTRIBUTES) || (GetLastError() == ERROR_FILE_NOT_FOUND)) {
+				bContinue = FALSE;
+				i--;
+			}
+		}
+
+		TWAINCapture->numPictures = i;
+	}
+
+	TWAINCapture->done = TRUE;
+
+	return 0;
+}
+
+//  FUNCTION:	OrchTwain_Get(LPCSTR filePath, BOOL Get64)
+//
+//  PURPOSE:	Launches the external OrchTwain DLL and waits for the operation to finish
+//
+//  COMMENTS:
+//
+//	DATE:		WJF 9/10/15 #43727
+long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL ShowUI, BOOL IsWIA, BOOL GetMultiple) {
+	long returnValue = 1;
+	WCHAR *WCPluginPath, *WCToCharInBuffer;
+	size_t bufferSize;
+	WCHAR wcTWAINGetSource[MAX_PATH] = L"";
+
+	WCHAR lpParameters[MAX_PATH_PLUS] = L"";
+	char *pos = NULL;
+	SHELLEXECUTEINFO utilities;
+	DWORD dwExitCode = 0;
+	BOOL bSuccess = FALSE;
+	
+	bufferSize = (25 + wcslen(wc4DXPath));
+	WCPluginPath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
+
+	wcscpy_s(WCPluginPath, bufferSize, wc4DXPath);
+
+	WCToCharInBuffer = wcsrchr(WCPluginPath, L'\\');
+	if (WCToCharInBuffer != NULL) {
+		WCToCharInBuffer[0] = NULL;
+	}
+
+	wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
+
+	wcscpy_s(wcTWAINGetSource, MAX_PATH, wcTwainSource);
+
+	// WJF 9/21/15 #43940
+	if (wcTWAINGetSource) {
+		WCToCharInBuffer = NULL;
+		WCToCharInBuffer = wcsrchr(wcTWAINGetSource, L'-');
+
+		if (WCToCharInBuffer != NULL) {
+			if (wcscmp(WCToCharInBuffer, L"-WIA") == 0) {
+				IsWIA = TRUE;
+			}
+
+			WCToCharInBuffer[0] = NULL;
+		}
+	}
+
+	if (IsWIA) { // WJF 9/21/15 #43940
+		wcscpy_s(lpParameters, MAX_PATH_PLUS, L"-wa ");		
+	}
+	else {
+		wcscpy_s(lpParameters, MAX_PATH_PLUS, L"-A ");
+	}
+	
+	wcscat_s(lpParameters, MAX_PATH_PLUS, filePath);
+	
+	if (GetMultiple) {
+		wcscat_s(lpParameters, MAX_PATH_PLUS, L" 1");
+	}
+	else {
+		wcscat_s(lpParameters, MAX_PATH_PLUS, L" 0");
+	}
+
+	if (ShowUI) {
+		wcscat_s(lpParameters, MAX_PATH_PLUS, L" 1 ");
+	}
+	else {
+		wcscat_s(lpParameters, MAX_PATH_PLUS, L" 0 ");
+	}
+
+	if (wcTWAINGetSource) {
+		if (wcscmp(wcTWAINGetSource, L"") != 0) {
+			wcscat_s(lpParameters, MAX_PATH_PLUS, L"\"");
+			wcscat_s(lpParameters, MAX_PATH_PLUS, wcTWAINGetSource);
+			wcscat_s(lpParameters, MAX_PATH_PLUS, L"\"");
+		}
+	}
+
+	// WJF 3/29/16 Win-11
+	utilities.cbSize = sizeof(SHELLEXECUTEINFO);
+	utilities.fMask = SEE_MASK_NOCLOSEPROCESS;
+	utilities.hwnd = (HWND)PA_GetMainWindowHWND();
+	utilities.lpVerb = NULL;
+	utilities.lpFile = WCPluginPath;
+	utilities.lpParameters = lpParameters;
+	utilities.lpDirectory = NULL;
+	utilities.nShow = SW_SHOW;
+	utilities.hInstApp = NULL;
+	ShellExecuteEx(&utilities);
+
+	// WJF 3/29/16 Win-11 Wait until the process closes
+	do {
+		Sleep(100);
+		bSuccess = GetExitCodeProcess(utilities.hProcess, &dwExitCode);
+	} while ((dwExitCode == STILL_ACTIVE) && (bSuccess));
+
+	free(WCPluginPath);
+
+	returnValue = 0;
+
+	return returnValue;
+}

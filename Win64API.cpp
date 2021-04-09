@@ -193,6 +193,11 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			TWAIN_SetSource(params);
 			break;
 
+		case 25: // TWAIN_AcquireImage
+			// ACW 4/5/21 WIN-119
+			TWAIN_AcquireImage(params);
+			break;
+
 	}
 }
 
