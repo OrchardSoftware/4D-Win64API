@@ -41,6 +41,7 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_IsAppLoaded" // JEM 3/17/21 WIN-77
 	,L"sys_ShellExecute" // JEM 3/18/21 WIN-84
 	,L"sys_GetUTCOffset" // JEM 3/18/21 WIN-121
+	,L"gui_LoadBackground" // ACW 3/26/21 WIN-116
 	,L"TWAIN_GetSources" // ACW 4/1/21 WIN-119
 	,L"TWAIN_SetSource" // ACW 4/1/21 WIN-119
 	,L"TWAIN_AcquireImage" // ACW 4/1/21 WIN-119
@@ -75,7 +76,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case kDeinitPlugin:
-			DeinitPlugin();
+			DeinitPlugin(params);
 			break;
 
 		case 1: // sys_GetRegEnum
@@ -139,27 +140,27 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case 14: // gui_SetWindowLongEx
-				 // ACW 3/11/21 WIN-115
+			// ACW 3/11/21 WIN-115
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetWindowLongEx, params);
 			break;
 
 		case 15: // gui_SelectColor
-				 // ACW 3/11/21 WIN-118
+			// ACW 3/11/21 WIN-118
 			gui_SelectColor(params);
 			break;
 
 		case 16: // sys_GetDefPrinter
-				 // ACW 3/15/21 WIN-104
+			// ACW 3/15/21 WIN-104
 			sys_GetDefPrinter(params);
 			break;
 
 		case 17: // sys_SetDefPrinter
-				 // ACW 3/15/21 WIN-120
+			// ACW 3/15/21 WIN-120
 			sys_SetDefPrinter(params);
 			break;
 
 		case 18: // sys_SendRawPrinterData
-				 // ACW 3/15/21 WIN-108
+			// ACW 3/15/21 WIN-108
 			sys_SendRawPrinterData(params);
 			break;
 
@@ -169,31 +170,36 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case 20: // sys_IsAppLoaded
-				 // JEM 3/17/21 WIN-96
+			// JEM 3/17/21 WIN-96
 			sys_IsAppLoaded(params);
 			break;
 
 		case 21: // sys_ShellExecute
-				 // JEM 3/18/21 WIN-84
+			// JEM 3/18/21 WIN-84
 			sys_ShellExecute(params);
 			break;
 
 		case 22: // sys_GetUTCOffset
-				 // JEM 3/18/21 WIN-121
+			// JEM 3/18/21 WIN-121
 			sys_GetUTCOffset(params);
 			break;
 			
-		case 23: // TWAIN_GetSources
+		case 23: // gui_LoadBackground
+			// ACW 3/26/21 WIN-116			
+			gui_LoadBackground(params, FALSE);
+			break;
+
+		case 24: // TWAIN_GetSources
 			// ACW 4/1/21 WIN-119
 			TWAIN_GetSources(params);
 			break;
 
-		case 24: // TWAIN_SetSource
+		case 25: // TWAIN_SetSource
 			// ACW 4/5/21 WIN-119
 			TWAIN_SetSource(params);
 			break;
 
-		case 25: // TWAIN_AcquireImage
+		case 26: // TWAIN_AcquireImage
 			// ACW 4/5/21 WIN-119
 			TWAIN_AcquireImage(params);
 			break;
@@ -210,9 +216,12 @@ void InitPlugin()
 
 }
 
-void DeinitPlugin()
+void DeinitPlugin(PA_PluginParameters params)
 {
-	// Write deinitialisation code here...
+
+	// Close subclassed window if we loaded a background image
+	gui_LoadBackground(params, TRUE);
+
 }
 
 

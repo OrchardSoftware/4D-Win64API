@@ -89,6 +89,10 @@
       "theme": "Win64API Commands"
     },
     {
+      "syntax": "gui_LoadBackground(&T;&L):L",
+      "theme": "Win64API Commands"
+    },
+    {
       "syntax": "TWAIN_GetSources(&Y;&L;&L):L",
       "theme": "Win64API Commands"
     },

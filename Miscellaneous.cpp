@@ -130,6 +130,13 @@ void gui_SelectColor(PA_PluginParameters params)
 	COLORREF CRSelected;
 		
 	PALReturnValue = 0;
+
+	// If we are on the server just return
+	if (PA_Is4DServer()) {
+		PA_ReturnLong(params, PALReturnValue);
+		return;
+	}
+		
 	PALRedParam = PA_GetLongParameter(params, 1);
 	PALGreenParam = PA_GetLongParameter(params, 2);
 	PALBlueParam = PA_GetLongParameter(params, 3);
