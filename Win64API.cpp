@@ -1,4 +1,4 @@
-﻿//Win64API.cpp
+﻿// Win64API.cpp
 /* --------------------------------------------------------------------------------
  #
  #	Win64API.cpp
@@ -9,7 +9,6 @@
  #
  # --------------------------------------------------------------------------------*/
 
-
 #include "Win64API.h"
 #include "Registry.h"
 #include "WindowManagement.h"
@@ -17,6 +16,7 @@
 #include "Logging.h"
 #include "Process.h"
 #include "Printing.h"
+#include "TWAIN.h"
 
 const wchar_t* const win32Commands[] = {
 	L"sys_GetRegEnum"
@@ -41,6 +41,10 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_IsAppLoaded" // JEM 3/17/21 WIN-77
 	,L"sys_ShellExecute" // JEM 3/18/21 WIN-84
 	,L"sys_GetUTCOffset" // JEM 3/18/21 WIN-121
+	,L"gui_LoadBackground" // ACW 3/26/21 WIN-116
+	,L"TWAIN_GetSources" // ACW 4/1/21 WIN-119
+	,L"TWAIN_SetSource" // ACW 4/1/21 WIN-119
+	,L"TWAIN_AcquireImage" // ACW 4/1/21 WIN-119
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -50,7 +54,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 
 	if ((selector > 0) && (selector <= NUM_COMMANDS)) { // WJF 7/11/16 Win-20 200 -> NUM_COMMANDS, <= -> <  // This should be less than or equal since 4D is 1 based and C is zero based
 		size_t bufferSize = (5 + wcslen(win32Commands[selector - 1]));
-		wCommandID = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);		
+		wCommandID = (WCHAR*) malloc (sizeof(WCHAR) * bufferSize);		
 		
 		// WJF 7/11/16 Win-20 szCommandConst -> win32Commands[selector-1]  
 		// ZRW 3/23/17 WIN-39 128 -> sizeof(szCommandID)
@@ -62,6 +66,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 		wcscat_s(wCommandID, bufferSize, L"\r\n");
 
 		writeLogFile(wCommandID);
+		free(wCommandID);
 	}
 
 	switch (selector)
@@ -183,6 +188,22 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			// ACW 3/26/21 WIN-116			
 			gui_LoadBackground(params, FALSE);
 			break;
+
+		case 24: // TWAIN_GetSources
+			// ACW 4/1/21 WIN-119
+			TWAIN_GetSources(params);
+			break;
+
+		case 25: // TWAIN_SetSource
+			// ACW 4/5/21 WIN-119
+			TWAIN_SetSource(params);
+			break;
+
+		case 26: // TWAIN_AcquireImage
+			// ACW 4/5/21 WIN-119
+			TWAIN_AcquireImage(params);
+			break;
+
 	}
 }
 

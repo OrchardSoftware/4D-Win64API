@@ -308,12 +308,6 @@ void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
 	{
 		case 0:  // Assume tiled if no param
 			PALTileOrScale = BM_TILE;
-
-			// ACW 3/26/21 TODO DO we need this?
-			//if (g_bDragFull) { // Reset to original style if changing from scaled to tiled
-			//	SystemParametersInfo(SPI_SETDRAGFULLWINDOWS, g_bDragFull, NULL, 0);
-			//}
-
 			break;
 
 		case BM_SCALE:

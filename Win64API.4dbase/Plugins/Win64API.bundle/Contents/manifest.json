@@ -91,6 +91,18 @@
     {
       "syntax": "gui_LoadBackground(&T;&L):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "TWAIN_GetSources(&Y;&L;&L):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "TWAIN_SetSource(&T):L",
+      "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "TWAIN_AcquireImage(&L;&Y;&L;&L;&L):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
