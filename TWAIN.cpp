@@ -22,9 +22,7 @@ extern "C" __declspec(dllexport) {
 	BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 	{
 		BOOL result = TRUE;
-		//char fullpath[512] = "";
 		GetModuleFileName(hinstDLL, wc4DXPath, MAXBUF); // Get the path to the 4DX
-		//strcpy_s((char *)pathName, sizeof(pathName), (char *)fullpath);  // ZRW 3/22/17 WIN-39 strcpy -> strcpy_s
 		return result;
 	}
 #ifdef _cplusplus
@@ -140,10 +138,8 @@ void TWAIN_GetSources(PA_PluginParameters params)
 		GetTempPath(MAX_PATH, filePath);
 
 		wcscat_s(filePath, MAX_PATH, L"wiaSources.txt");
-		//strcat_s(filePath, sizeof(filePath), "wiaSources.txt");  // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(filePath)
-
+		
 		wcscpy_s(lpParameters, 16, L"-ws");
-		// strcpy_s(lpParameters, sizeof(lpParameters), "-ws");  // ZRW 3/22/17 WIN-39 16 -> sizeof(lpParameters)
 
 		utilities.hProcess = NULL;
 		utilities.lpParameters = lpParameters;
@@ -304,6 +300,7 @@ void TWAIN_AcquireImage(PA_PluginParameters params)
 	// Yield time back to 4D until the capture is finished.
 	while (TWAINCapture.done == FALSE) {
 		PA_YieldAbsolute();
+		Sleep(5);
 	}
 
 	PALReturnValue = TWAINCapture.returnValue;
@@ -353,11 +350,11 @@ void TWAIN_AcquireImage(PA_PluginParameters params)
 				PA_ResizeArray(&PAVBlobArray, indexInArray);
 				PA_SetBlobInArray(PAVBlobArray, indexInArray, PAVTWAINImageBlob.uValue.fBlob);
 
+				// Free memory				
+				free(buffer);
+
 				// Delete the temp file
 				DeleteFile(WCFileNameToBlob);
-
-				// Free memory
-				free(buffer);
 			}
 
 		}
@@ -401,24 +398,18 @@ unsigned __stdcall TWAIN_GetImage(void *arg)
 			i++;
 
 			wcscpy_s(filePath, MAX_PATH, TWAINCapture->filePath);
-			//strcpy_s(filePath, sizeof(filePath), TWAINCapture->filePath);  // ZRW 3/23/17 WIN-39 MAX_PATH -> sizeof(filePath)
 
 			WCToCharInBuffer = wcsrchr(filePath, L'.');
-			//pos = strrchr(filePath, '.');
 
 			_itow_s(i, iterator, 10);
 
 			if (WCToCharInBuffer != NULL) {
 				WCToCharInBuffer[0] = NULL;
-				//*WCToCharInBuffer = iterator;
 			}
 
-			
 			wcscat_s(filePath, MAX_PATH, iterator);
-			// strcpy_s(pos, MAX_PATH, iterator);
 
 			wcscat_s(filePath, MAX_PATH, L".bmp");
-			//strcat_s(filePath, sizeof(filePath), ".bmp");  // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(filePath)
 
 			if ((GetFileAttributes(filePath) == INVALID_FILE_ATTRIBUTES) || (GetLastError() == ERROR_FILE_NOT_FOUND)) {
 				bContinue = FALSE;
