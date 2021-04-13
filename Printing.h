@@ -16,3 +16,4 @@
 void sys_GetDefPrinter(PA_PluginParameters params);
 void sys_SetDefPrinter(PA_PluginParameters params);
 void sys_SendRawPrinterData(PA_PluginParameters params);
+void sys_GetPrintJob(PA_PluginParameters params); // ACW 4/13/21 WIN-89

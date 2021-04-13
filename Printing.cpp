@@ -72,7 +72,6 @@ void sys_SetDefPrinter(PA_PluginParameters params)
 //
 // AMS 12/5/14 #37816
 //
-
 void sys_SendRawPrinterData(PA_PluginParameters params) {
 	PA_long32 PALReturnValue;
 	PA_Unistring *PAUPrinterName, *PAURawData;
@@ -121,6 +120,16 @@ void sys_SendRawPrinterData(PA_PluginParameters params) {
 	{
 		PALReturnValue = 0;
 	}
+
+	PA_ReturnLong(params, PALReturnValue);
+}
+
+// This is just stub for now and will possible be removed from the plugin altogether
+void sys_GetPrintJob(PA_PluginParameters params)
+{
+	PA_long32 PALReturnValue;
+
+	PALReturnValue = 0;
 
 	PA_ReturnLong(params, PALReturnValue);
 }

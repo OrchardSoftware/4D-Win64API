@@ -44,7 +44,8 @@ const wchar_t* const win32Commands[] = {
 	,L"gui_LoadBackground" // ACW 3/26/21 WIN-116
 	,L"TWAIN_GetSources" // ACW 4/1/21 WIN-119
 	,L"TWAIN_SetSource" // ACW 4/1/21 WIN-119
-	,L"TWAIN_AcquireImage" // ACW 4/1/21 WIN-119
+	,L"TWAIN_AcquireImage" // ACW 4/1/21 WIN-119,
+	,L"sys_GetPrintJob" // ACW 4/13/21 WIN-89
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -204,6 +205,10 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			TWAIN_AcquireImage(params);
 			break;
 
+		case 27: // sys_GetPrintJob
+			// ACW 4/13/21 WIN-89
+			sys_GetPrintJob(params);
+			break;
 	}
 }
 

@@ -103,6 +103,10 @@
     {
       "syntax": "TWAIN_AcquireImage(&L;&Y;&L;&L;&L):L",
       "theme": "Win64API Commands"
+    },
+    {
+      "syntax": "sys_GetPrintJob(&Y;&T):L",
+      "theme": "Win64API Commands"
     }
   ],
   "id": 15000,
