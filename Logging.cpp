@@ -11,7 +11,7 @@ WCHAR *logFilePath, *dateOpened;
 
 //  FUNCTION:   sys_LoggingStart(PA_PluginParameters params)
 //
-//  PURPOSE:	Start logging Win32API commands
+//  PURPOSE:	Start logging Win64API commands
 //
 //  COMMENTS:
 //
@@ -29,7 +29,7 @@ void sys_LoggingStart(PA_PluginParameters params) {
 
 //  FUNCTION:   sys_LoggingStop(PA_PluginParameters params)
 //
-//  PURPOSE:	Stop logging Win32API commands
+//  PURPOSE:	Stop logging Win64API commands
 //
 //  COMMENTS:
 //
@@ -73,7 +73,11 @@ void writeLogFile(WCHAR * strLog)
 			LockFile(hLogFile, dwPos, 0, logLength, 0);
 			WriteFile(hLogFile, szOutput, logLength, &dwBytesWritten, NULL);
 			UnlockFile(hLogFile, dwPos, 0, logLength, 0);
+
+			free(szOutput);
 		}
+
+		free(dateComp);
 	}
 }
 
@@ -142,9 +146,13 @@ PA_long32 logMaintenance() {
 				if (DeleteFile(deletePath)) {
 					lNumDeleted++; // WJF 7/11/16 Win-20
 				}
+
+				free(deletePath);
 			}
 		}
 	} while (FindNextFile(hFind, &ffd) != 0);
+
+	free(searchPath);
 
 	return lNumDeleted;
 }
@@ -156,7 +164,7 @@ PA_long32 logOpenFile() {
 	PA_long32 PALReturnValue = 0;
 
 	if (PAULogPath != NULL) {
-		// Adding in additional space for "Win32API_", the date, and ".log"
+		// Adding in additional space for "Win64API_", the date, and ".log"
 		size_t bufferSize = PAULogPath->fLength + 30;
 	
 		logFilePath = (WCHAR*) malloc(sizeof(WCHAR) * (bufferSize));
@@ -171,7 +179,7 @@ PA_long32 logOpenFile() {
 			logMaintenance();
 		}
 
-		wcscat_s(logFilePath, bufferSize, L"Win32API_"); // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(logFilePath)
+		wcscat_s(logFilePath, bufferSize, L"Win64API_"); // ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(logFilePath)
 
 		GetLocalTime(&lt);
 
@@ -187,7 +195,7 @@ PA_long32 logOpenFile() {
 		if (hLogFile != INVALID_HANDLE_VALUE) {
 			bLogIsOpen = TRUE;
 			PALReturnValue = 1; // WJF 7/11/16 Win-20
-		}
+		}		
 	}
 
 	return PALReturnValue;

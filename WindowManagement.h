@@ -19,6 +19,10 @@
 #define IS_ICONIC 1
 #define IS_ZOOMED 2
 
+#define BM_TILE				1
+#define BM_SCALE			2
+#define BM_SCALETOMAXCLIENT 3
+
 // Internal methods
 void initWindowManagement();
 
@@ -29,3 +33,7 @@ void gui_GetWindowStateEx(PA_PluginParameters params); // ACW 1/11/21 WIN-109
 void gui_ShowWindowEx(PA_PluginParameters params); // ACW 1/14/21 WIN-112
 void gui_DisableCloseBoxEx(PA_PluginParameters params); // ACW 1/14/21 WIN-114
 void gui_SetWindowLongEx(PA_PluginParameters params); // ACW 3/11/21 WIN-115
+void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit); // ACW 3/26/21 WIN-116
+
+LRESULT APIENTRY BkgrndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+

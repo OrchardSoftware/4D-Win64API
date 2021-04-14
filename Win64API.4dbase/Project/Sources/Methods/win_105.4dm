@@ -8,6 +8,6 @@
 C_LONGINT:C283($lErr)
 C_TEXT:C284($tPath)
 
-$tPath:=Get 4D folder:C485(Logs folder:K5:19)+"Win32API"+Folder separator:K24:12
+$tPath:=Get 4D folder:C485(Logs folder:K5:19)+"Win64API"+Folder separator:K24:12
 
 $lErr:=sys_LoggingStart ($tPath;1)

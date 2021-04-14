@@ -1,4 +1,4 @@
-﻿//Win64API.cpp
+﻿// Win64API.cpp
 /* --------------------------------------------------------------------------------
  #
  #	Win64API.cpp
@@ -9,7 +9,6 @@
  #
  # --------------------------------------------------------------------------------*/
 
-
 #include "Win64API.h"
 #include "Registry.h"
 #include "WindowManagement.h"
@@ -17,8 +16,9 @@
 #include "Logging.h"
 #include "Process.h"
 #include "Printing.h"
+#include "TWAIN.h"
 
-const wchar_t* const win32Commands[] = {
+const wchar_t* const win64Commands[] = {
 	L"sys_GetRegEnum"
 	,L"sys_GetRegLongint" // ACW 10/16/20 WIN-80
 	,L"sys_GetRegText" // ACW 10/20/20 WIN-78 
@@ -41,6 +41,11 @@ const wchar_t* const win32Commands[] = {
 	,L"sys_IsAppLoaded" // JEM 3/17/21 WIN-77
 	,L"sys_ShellExecute" // JEM 3/18/21 WIN-84
 	,L"sys_GetUTCOffset" // JEM 3/18/21 WIN-121
+	,L"gui_LoadBackground" // ACW 3/26/21 WIN-116
+	,L"TWAIN_GetSources" // ACW 4/1/21 WIN-119
+	,L"TWAIN_SetSource" // ACW 4/1/21 WIN-119
+	,L"TWAIN_AcquireImage" // ACW 4/1/21 WIN-119,
+	,L"sys_GetPrintJob" // ACW 4/13/21 WIN-89
 };
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params)
@@ -49,19 +54,20 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 	WCHAR *wCommandID;
 
 	if ((selector > 0) && (selector <= NUM_COMMANDS)) { // WJF 7/11/16 Win-20 200 -> NUM_COMMANDS, <= -> <  // This should be less than or equal since 4D is 1 based and C is zero based
-		size_t bufferSize = (5 + wcslen(win32Commands[selector - 1]));
-		wCommandID = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);		
+		size_t bufferSize = (5 + wcslen(win64Commands[selector - 1]));
+		wCommandID = (WCHAR*) malloc (sizeof(WCHAR) * bufferSize);		
 		
-		// WJF 7/11/16 Win-20 szCommandConst -> win32Commands[selector-1]  
+		// WJF 7/11/16 Win-20 szCommandConst -> win64Commands[selector-1]  
 		// ZRW 3/23/17 WIN-39 128 -> sizeof(szCommandID)
 		// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
-		wcscpy_s(wCommandID, bufferSize, win32Commands[selector - 1]);
+		wcscpy_s(wCommandID, bufferSize, win64Commands[selector - 1]);
 																					
 		// ZRW 4/5/17 WIN-39 128 -> sizeof(szCommandID)
 		// ACW 3/3/21 WIN-105 strcat_s -> wcscat_s
 		wcscat_s(wCommandID, bufferSize, L"\r\n");
 
 		writeLogFile(wCommandID);
+		free(wCommandID);
 	}
 
 	switch (selector)
@@ -71,7 +77,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case kDeinitPlugin:
-			DeinitPlugin();
+			DeinitPlugin(params);
 			break;
 
 		case 1: // sys_GetRegEnum
@@ -135,27 +141,27 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case 14: // gui_SetWindowLongEx
-				 // ACW 3/11/21 WIN-115
+			// ACW 3/11/21 WIN-115
 			PA_RunInMainProcess((PA_RunInMainProcessProcPtr)gui_SetWindowLongEx, params);
 			break;
 
 		case 15: // gui_SelectColor
-				 // ACW 3/11/21 WIN-118
+			// ACW 3/11/21 WIN-118
 			gui_SelectColor(params);
 			break;
 
 		case 16: // sys_GetDefPrinter
-				 // ACW 3/15/21 WIN-104
+			// ACW 3/15/21 WIN-104
 			sys_GetDefPrinter(params);
 			break;
 
 		case 17: // sys_SetDefPrinter
-				 // ACW 3/15/21 WIN-120
+			// ACW 3/15/21 WIN-120
 			sys_SetDefPrinter(params);
 			break;
 
 		case 18: // sys_SendRawPrinterData
-				 // ACW 3/15/21 WIN-108
+			// ACW 3/15/21 WIN-108
 			sys_SendRawPrinterData(params);
 			break;
 
@@ -165,20 +171,44 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 			break;
 
 		case 20: // sys_IsAppLoaded
-				 // JEM 3/17/21 WIN-96
+			// JEM 3/17/21 WIN-96
 			sys_IsAppLoaded(params);
 			break;
 
 		case 21: // sys_ShellExecute
-				 // JEM 3/18/21 WIN-84
+			// JEM 3/18/21 WIN-84
 			sys_ShellExecute(params);
 			break;
 
 		case 22: // sys_GetUTCOffset
-				 // JEM 3/18/21 WIN-121
+			// JEM 3/18/21 WIN-121
 			sys_GetUTCOffset(params);
 			break;
 			
+		case 23: // gui_LoadBackground
+			// ACW 3/26/21 WIN-116			
+			gui_LoadBackground(params, FALSE);
+			break;
+
+		case 24: // TWAIN_GetSources
+			// ACW 4/1/21 WIN-119
+			TWAIN_GetSources(params);
+			break;
+
+		case 25: // TWAIN_SetSource
+			// ACW 4/5/21 WIN-119
+			TWAIN_SetSource(params);
+			break;
+
+		case 26: // TWAIN_AcquireImage
+			// ACW 4/5/21 WIN-119
+			TWAIN_AcquireImage(params);
+			break;
+
+		case 27: // sys_GetPrintJob
+			// ACW 4/13/21 WIN-89
+			sys_GetPrintJob(params);
+			break;
 	}
 }
 
@@ -191,9 +221,12 @@ void InitPlugin()
 
 }
 
-void DeinitPlugin()
+void DeinitPlugin(PA_PluginParameters params)
 {
-	// Write deinitialisation code here...
+
+	// Close subclassed window if we loaded a background image
+	gui_LoadBackground(params, TRUE);
+
 }
 
 

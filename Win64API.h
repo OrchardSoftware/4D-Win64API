@@ -12,5 +12,5 @@
 #include "Defines.h"
 
 void InitPlugin();
-void DeinitPlugin();
+void DeinitPlugin(PA_PluginParameters params);
 
