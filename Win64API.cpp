@@ -18,7 +18,7 @@
 #include "Printing.h"
 #include "TWAIN.h"
 
-const wchar_t* const win32Commands[] = {
+const wchar_t* const win64Commands[] = {
 	L"sys_GetRegEnum"
 	,L"sys_GetRegLongint" // ACW 10/16/20 WIN-80
 	,L"sys_GetRegText" // ACW 10/20/20 WIN-78 
@@ -54,13 +54,13 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params)
 	WCHAR *wCommandID;
 
 	if ((selector > 0) && (selector <= NUM_COMMANDS)) { // WJF 7/11/16 Win-20 200 -> NUM_COMMANDS, <= -> <  // This should be less than or equal since 4D is 1 based and C is zero based
-		size_t bufferSize = (5 + wcslen(win32Commands[selector - 1]));
+		size_t bufferSize = (5 + wcslen(win64Commands[selector - 1]));
 		wCommandID = (WCHAR*) malloc (sizeof(WCHAR) * bufferSize);		
 		
-		// WJF 7/11/16 Win-20 szCommandConst -> win32Commands[selector-1]  
+		// WJF 7/11/16 Win-20 szCommandConst -> win64Commands[selector-1]  
 		// ZRW 3/23/17 WIN-39 128 -> sizeof(szCommandID)
 		// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
-		wcscpy_s(wCommandID, bufferSize, win32Commands[selector - 1]);
+		wcscpy_s(wCommandID, bufferSize, win64Commands[selector - 1]);
 																					
 		// ZRW 4/5/17 WIN-39 128 -> sizeof(szCommandID)
 		// ACW 3/3/21 WIN-105 strcat_s -> wcscat_s
