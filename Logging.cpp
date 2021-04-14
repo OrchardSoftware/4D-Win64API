@@ -146,9 +146,13 @@ PA_long32 logMaintenance() {
 				if (DeleteFile(deletePath)) {
 					lNumDeleted++; // WJF 7/11/16 Win-20
 				}
+
+				free(deletePath);
 			}
 		}
 	} while (FindNextFile(hFind, &ffd) != 0);
+
+	free(searchPath);
 
 	return lNumDeleted;
 }
