@@ -86,7 +86,7 @@
     <TargetExt>.4DX</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>Win64API.4dbase\Plugins\Win64API.bundle\Contents\Windows64\</OutDir>
+    <OutDir>Release\Win64API.bundle\Contents\Windows64\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.4DX</TargetExt>
@@ -159,7 +159,7 @@
       <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command />
+      <Command>call "$(ProjectDir)BuildFiles\PostBuild.bat" "$(TargetDir)" "$(ProjectDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -214,7 +214,7 @@
       <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
-      <OutputFile>$(ProjectDir)Win64API.bundle\Contents\Windows64\Win64API.4DX</OutputFile>
+      <OutputFile>$(ProjectDir)Release\Win64API.bundle\Contents\Windows64\Win64API.4DX</OutputFile>
       <ModuleDefinitionFile>.\4D Plugin API\4DPluginAPI.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -226,7 +226,7 @@
       <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command />
+      <Command>call "$(ProjectDir)BuildFiles\PostBuild.bat" "$(TargetDir)" "$(ProjectDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -258,10 +258,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="4D Plugin API\4DPluginAPI.def" />
-    <None Include="Win64API.4dbase\Plugins\Win64API.bundle\Contents\manifest.json" />
-    <None Include="Win64API.4dbase\Plugins\Win64API.bundle\Contents\Resources\constants.xlf">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="BuildFiles\constants.xlf" />
+    <None Include="BuildFiles\LICENSE" />
+    <None Include="BuildFiles\manifest.json" />
+    <None Include="BuildFiles\PostBuild.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

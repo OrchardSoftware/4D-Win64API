@@ -43,10 +43,16 @@
     <None Include="4D Plugin API\4DPluginAPI.def">
       <Filter>SDK</Filter>
     </None>
-    <None Include="Win64API.4dbase\Plugins\Win64API.bundle\Contents\Resources\constants.xlf">
+    <None Include="BuildFiles\constants.xlf">
       <Filter>Resources</Filter>
     </None>
-    <None Include="Win64API.4dbase\Plugins\Win64API.bundle\Contents\manifest.json">
+    <None Include="BuildFiles\LICENSE">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="BuildFiles\manifest.json">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="BuildFiles\PostBuild.bat">
       <Filter>Resources</Filter>
     </None>
   </ItemGroup>
