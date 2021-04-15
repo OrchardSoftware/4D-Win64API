@@ -16,3 +16,6 @@ echo F|xcopy /i /y %2BuildFiles\Orchard_Utilities.exe %1Orchard_Utilities.exe
 
 :: Copy TWAINDSM.dll
 echo F|xcopy /i /y %2BuildFiles\TWAINDSM.dll %1TWAINDSM.dll
+
+:: Delete the Win64API.exp file that is created because of FourDPackex
+del /f %1Win64API.exp
