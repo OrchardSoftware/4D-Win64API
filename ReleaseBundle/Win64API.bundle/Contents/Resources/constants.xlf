@@ -28,6 +28,18 @@
     </trans-unit>
   </group>
 
+  <group id="60" restype="x-4DK#">
+    <trans-unit id="61">
+      <source>WINAPI_WindowState</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="62">
+      <source>IS_MINIMIZED</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="63">
+      <source>IS_MAXIMIZED</source>
+    </trans-unit>
+  </group>
+
   <group id="118" restype="x-4DK#">
     <trans-unit id="119">
       <source>WINAPI_BitMap</source>
