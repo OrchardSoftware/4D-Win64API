@@ -55,6 +55,12 @@
     <None Include="BuildFiles\PostBuild.bat">
       <Filter>Resources</Filter>
     </None>
+    <None Include="BuildFiles\Orchard_Utilities.exe">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="BuildFiles\TWAINDSM.dll">
+      <Filter>Resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

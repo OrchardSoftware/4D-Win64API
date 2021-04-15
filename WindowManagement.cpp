@@ -283,7 +283,7 @@ void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
 	
 	static LONG_PTR	lLastTileOrScale = 0;
 	static HWND hWindow = 0;
-	static WCHAR *wLastBackgroundPath;
+	static WCHAR *wLastBackgroundPath = NULL;
 
 	size_t bufferSize;
 	BOOL bFuncReturn;
@@ -346,6 +346,12 @@ void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
 			hWindow = NULL;
 			
 			bufferSize = 1;
+
+			if (wLastBackgroundPath) {
+				free(wLastBackgroundPath);
+				wLastBackgroundPath = NULL;
+			}
+
 			wLastBackgroundPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
 			wcscpy_s(wLastBackgroundPath, bufferSize, L"");
 			lLastTileOrScale = 0;
@@ -389,6 +395,12 @@ void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
 			bFuncReturn = InvalidateRect(hWindow, &rect, TRUE);
 			
 			bufferSize = PAUBackgroundPath->fLength + 1;
+
+			if (wLastBackgroundPath) {
+				free(wLastBackgroundPath);
+				wLastBackgroundPath = NULL;
+			}
+
 			wLastBackgroundPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
 			wcscpy_s(wLastBackgroundPath, bufferSize, (WCHAR*)PAUBackgroundPath->fString);
 
