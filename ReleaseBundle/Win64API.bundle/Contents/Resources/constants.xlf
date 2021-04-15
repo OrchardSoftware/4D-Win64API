@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <group id="17" restype="x-4DK#">
+    <trans-unit id="18">
+      <source>WINAPI_GetRegistry</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="19">
+      <source>GR_HKEY_CLASSES_ROOT</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="20">
+      <source>GR_HKEY_CURRENT_USER</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="21">
+      <source>GR_HKEY_DYN_DATA</source>
+    </trans-unit>
+    <trans-unit d4:value="4" id="22">
+      <source>GR_HKEY_LOCAL_MACHINE</source>
+    </trans-unit>
+    <trans-unit d4:value="5" id="23">
+      <source>GR_HKEY_USERS</source>
+    </trans-unit>
+    <trans-unit d4:value="6" id="24">
+      <source>GR_HKEY_CURRENT_CONFIG</source>
+    </trans-unit>
+    <trans-unit d4:value="7" id="25">
+      <source>GR_HKEY_PERFORMANCE_DATA</source>
+    </trans-unit>
+  </group>
+
+  <group id="118" restype="x-4DK#">
+    <trans-unit id="119">
+      <source>WINAPI_BitMap</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="120">
+      <source>BM_TILE</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="121">
+      <source>BM_SCALE</source>
+    </trans-unit>
+    <trans-unit d4:value="" id="122">
+      <source>BM_CLOSE</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="123">
+      <source>BM_SCALETOMAXCLIENT</source>
+    </trans-unit>
+  </group>
+
+  <group id="213" restype="x-4DK#">
+    <trans-unit id="214">
+      <source>WINAPI_Misc</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="215">
+      <source>WIN_TRUE</source>
+    </trans-unit>
+    <trans-unit d4:value="0" id="216">
+      <source>WIN_FALSE</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="217">
+      <source>WIN_ENABLE</source>
+    </trans-unit>
+    <trans-unit d4:value="0" id="218">
+      <source>WIN_DISABLE</source>
+    </trans-unit>
+    <trans-unit d4:value="0" id="219">
+      <source>WIN_STYLE</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="220">
+      <source>WIN_EXSTYLE</source>
+    </trans-unit>
+  </group>
+
+
+  <group id="221" restype="x-4DK#">
+    <trans-unit id="222">
+      <source>WINAPI_WindowStyles</source>
+    </trans-unit>
+    <trans-unit d4:value="0" id="223">
+      <source>WS_OVERLAPPED</source>
+    </trans-unit>
+    <trans-unit d4:value="-2147483648" id="224">
+      <source>WS_POPUP</source>
+    </trans-unit>
+    <trans-unit d4:value="268435456" id="225">
+      <source>WS_VISIBLE</source>
+    </trans-unit>
+    <trans-unit d4:value="12582912" id="226">
+      <source>WS_CAPTION</source>
+    </trans-unit>
+    <trans-unit d4:value="8388608" id="227">
+      <source>WS_BORDER</source>
+    </trans-unit>
+    <trans-unit d4:value="4191304" id="228">
+      <source>WS_DLGFRAME</source>
+    </trans-unit>
+    <trans-unit d4:value="524288" id="229">
+      <source>WS_SYSMENU</source>
+    </trans-unit>
+    <trans-unit d4:value="262144" id="230">
+      <source>WS_THICKFRAME</source>
+    </trans-unit>
+    <trans-unit d4:value="1073741824" id="231">
+      <source>WS_CHILD</source>
+    </trans-unit>
+    <trans-unit d4:value="134217728" id="232">
+      <source>WS_DISABLED</source>
+    </trans-unit>
+    <trans-unit d4:value="67108864" id="233">
+      <source>WS_CLIPSIBLINGS</source>
+    </trans-unit>
+    <trans-unit d4:value="33554432" id="234">
+      <source>WS_CLIPCHILDREN</source>
+    </trans-unit>
+    <trans-unit d4:value="2097152" id="235">
+      <source>WS_VSCROLL</source>
+    </trans-unit>
+    <trans-unit d4:value="1048576" id="236">
+      <source>WS_HSCROLL</source>
+    </trans-unit>
+    <trans-unit d4:value="131072" id="237">
+      <source>WS_MINIMIZEBOX</source>
+    </trans-unit>
+    <trans-unit d4:value="65536" id="238">
+      <source>WS_MAXIMIZEBOX</source>
+    </trans-unit>
+  </group>
+
+  <group id="239" restype="x-4DK#">
+    <trans-unit id="240">
+      <source>WINAPI_ShowWindow</source>
+    </trans-unit>
+    <trans-unit d4:value="0" id="241">
+      <source>SW_HIDE</source>
+    </trans-unit>
+    <trans-unit d4:value="1" id="242">
+      <source>SW_SHOWNORMAL</source>
+    </trans-unit>
+    <trans-unit d4:value="2" id="243">
+      <source>SW_SHOWMINIMIZED</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="244">
+      <source>SW_SHOWMAXIMIZED</source>
+    </trans-unit>
+    <trans-unit d4:value="3" id="245">
+      <source>SW_MAXIMIZE</source>
+    </trans-unit>
+    <trans-unit d4:value="4" id="246">
+      <source>SW_SHOWNOACTIVATE</source>
+    </trans-unit>
+    <trans-unit d4:value="5" id="247">
+      <source>SW_SHOW</source>
+    </trans-unit>
+    <trans-unit d4:value="6" id="248">
+      <source>SW_MINIMIZE</source>
+    </trans-unit>
+    <trans-unit d4:value="7" id="249">
+      <source>SW_SHOWMINNOACTIVE</source>
+    </trans-unit>
+    <trans-unit d4:value="8" id="250">
+      <source>SW_SHOWNA</source>
+    </trans-unit>
+    <trans-unit d4:value="9" id="251">
+      <source>SW_RESTORE</source>
+    </trans-unit>
+  </group>
+
+</xliff>
