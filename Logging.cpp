@@ -7,7 +7,7 @@ PA_long32 PALNumDays = 0;
 
 BOOL bLogIsOpen = FALSE;
 HANDLE hLogFile = NULL;
-WCHAR *logFilePath, *dateOpened;
+WCHAR *dateOpened;
 
 //  FUNCTION:   sys_LoggingStart(PA_PluginParameters params)
 //
@@ -160,6 +160,7 @@ PA_long32 logMaintenance() {
 // WJF 7/11/16 Win-20 Internal function so that we can switch files when the day rolls over
 PA_long32 logOpenFile() {
 	SYSTEMTIME lt;
+	WCHAR *logFilePath;
 
 	PA_long32 PALReturnValue = 0;
 
@@ -196,6 +197,8 @@ PA_long32 logOpenFile() {
 			bLogIsOpen = TRUE;
 			PALReturnValue = 1; // WJF 7/11/16 Win-20
 		}		
+
+		free(logFilePath);
 	}
 
 	return PALReturnValue;
@@ -207,6 +210,8 @@ PA_long32 logCloseFile() {
 	PA_long32 lReturnValue = -1;
 
 	if (hLogFile != INVALID_HANDLE_VALUE) {
+		free(dateOpened);
+
 		if (CloseHandle(hLogFile)) {
 			lReturnValue = 0;
 			bLogIsOpen = FALSE;
