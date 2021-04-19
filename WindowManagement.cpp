@@ -370,6 +370,18 @@ void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
 	}
 	else {
 		hWindow = hBackground;
+
+		bufferSize = PAUBackgroundPath->fLength + 1;
+
+		if (wLastBackgroundPath) {
+			free(wLastBackgroundPath);
+			wLastBackgroundPath = NULL;
+		}
+
+		wLastBackgroundPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
+		wcscpy_s(wLastBackgroundPath, bufferSize, (WCHAR*)PAUBackgroundPath->fString);
+
+		lLastTileOrScale = PALTileOrScale;
 	}	
 	
 	hBitmap = (HBITMAP) LoadImage (0, (LPCWSTR)PAUBackgroundPath->fString, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -392,19 +404,7 @@ void gui_LoadBackground(PA_PluginParameters params, BOOL DeInit)
 		if (g_wpOrigMDIProc != 0) {
 			bFuncReturn = SendNotifyMessage(hWindow, (WM_USER + 0x0030), wParam, lParam);
 			bFuncReturn = GetClientRect(hWindow, &rect);
-			bFuncReturn = InvalidateRect(hWindow, &rect, TRUE);
-			
-			bufferSize = PAUBackgroundPath->fLength + 1;
-
-			if (wLastBackgroundPath) {
-				free(wLastBackgroundPath);
-				wLastBackgroundPath = NULL;
-			}
-
-			wLastBackgroundPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
-			wcscpy_s(wLastBackgroundPath, bufferSize, (WCHAR*)PAUBackgroundPath->fString);
-
-			lLastTileOrScale = PALTileOrScale;			
+			bFuncReturn = InvalidateRect(hWindow, &rect, TRUE);		
 		}
 		else {
 			PALReturnValue = 0;
