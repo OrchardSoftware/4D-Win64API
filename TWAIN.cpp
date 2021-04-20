@@ -34,7 +34,7 @@ extern "C" __declspec(dllexport) {
 void TWAIN_GetSources(PA_PluginParameters params)
 {
 	PA_Variable PAVSources;
-	PA_long32 PALReturnValue, PALDoNotAddSuffix, PALFlags;
+	PA_long32 PALReturnValue = 0, PALDoNotAddSuffix, PALFlags;
 	
 	size_t bufferSize;
 	WCHAR *WCPluginPath, *WCToCharInBuffer;
@@ -44,6 +44,12 @@ void TWAIN_GetSources(PA_PluginParameters params)
 	BOOL bSuccess = FALSE;
 	FILE *fp = NULL;
 	
+	// If we are on the server just return
+	if (PA_Is4DServer()) {
+		PA_ReturnLong(params, PALReturnValue);
+		return;
+	}
+
 	PAVSources = PA_GetVariableParameter(params, 1);
 	PA_ResizeArray(&PAVSources, 0);
 
@@ -202,8 +208,14 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 void TWAIN_SetSource(PA_PluginParameters params)
 {
-	PA_long32 PALReturnValue;
+	PA_long32 PALReturnValue = 0;
 	PA_Unistring *PAUSourceName;
+
+	// If we are on the server just return
+	if (PA_Is4DServer()) {
+		PA_ReturnLong(params, PALReturnValue);
+		return;
+	}
 
 	PAUSourceName = PA_GetStringParameter(params, 1);
 	
@@ -245,6 +257,12 @@ void TWAIN_AcquireImage(PA_PluginParameters params)
 	TWAIN_CAPTURE TWAINCapture;
 	HANDLE CaptureThread;
 	UINT threadID = 0;
+
+	// If we are on the server just return
+	if (PA_Is4DServer()) {
+		PA_ReturnLong(params, PALReturnValue);
+		return;
+	}
 
 	PALShowDialog = PA_GetLongParameter(params, 1);
 
