@@ -8,6 +8,9 @@ echo F|xcopy /i /y %2BuildFiles\LICENSE %1..\LICENSE
 :: Copy Manifest File
 echo F|xcopy /i /y %2BuildFiles\manifest.json %1..\manifest.json
 
+:: Copy PLIST File
+echo F|xcopy /i /y %2BuildFiles\Info.plist %1..\Info.plist
+
 :: Copy Constants File
 echo F|xcopy /i /y %2BuildFiles\constants.xlf %1..\Resources\constants.xlf
 

@@ -61,6 +61,9 @@
     <None Include="BuildFiles\TWAINDSM.dll">
       <Filter>Resources</Filter>
     </None>
+    <None Include="BuildFiles\Info.plist">
+      <Filter>Resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

@@ -266,6 +266,7 @@
   <ItemGroup>
     <None Include="4D Plugin API\4DPluginAPI.def" />
     <None Include="BuildFiles\constants.xlf" />
+    <None Include="BuildFiles\Info.plist" />
     <None Include="BuildFiles\LICENSE" />
     <None Include="BuildFiles\manifest.json" />
     <None Include="BuildFiles\Orchard_Utilities.exe" />
