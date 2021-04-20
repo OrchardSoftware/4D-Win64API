@@ -2,12 +2,11 @@
 
 #include "Logging.h"
 
-PA_Unistring* PAULogPath;
 PA_long32 PALNumDays = 0;
 
 BOOL bLogIsOpen = FALSE;
 HANDLE hLogFile = NULL;
-WCHAR *dateOpened;
+WCHAR *dateOpened, *WCLoggingPath = NULL;
 
 //  FUNCTION:   sys_LoggingStart(PA_PluginParameters params)
 //
@@ -19,7 +18,16 @@ WCHAR *dateOpened;
 void sys_LoggingStart(PA_PluginParameters params) {
 	PA_long32 PALReturnValue = 0; // WJF 7/11/16 Win-20
 		
-	PAULogPath = PA_GetStringParameter(params, 1);
+	PA_Unistring* PAULogPath = PA_GetStringParameter(params, 1);
+
+	size_t bufferSize = PAULogPath->fLength + 1;
+
+	WCLoggingPath = (WCHAR*)malloc(sizeof(WCHAR) * (bufferSize));
+
+	// ZRW 3/23/17 WIN-39 strcpy -> strcpy_s 
+	// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
+	wcscpy_s(WCLoggingPath, bufferSize, (WCHAR*)PAULogPath->fString);
+	
 	PALNumDays = PA_GetLongParameter(params, 2);
 
 	PALReturnValue = logOpenFile();
@@ -49,7 +57,7 @@ void writeLogFile(WCHAR * strLog)
 
 		dateComp = (WCHAR*)malloc(sizeof(WCHAR) * (17));
 		swprintf_s(dateComp, 16, L"%04u%02u%02u", lt.wYear, lt.wMonth, lt.wDay);
-
+		
 		// WJF 7/11/16 Win-20 If the current date doesn't match the date of the open log file, close it and make a new one
 		if (wcscmp(dateComp, dateOpened) != 0) {
 			logCloseFile();
@@ -101,15 +109,15 @@ PA_long32 logMaintenance() {
 	WCHAR *deletePath;
 	PA_long32 lNumDeleted = 0;
 
-	size_t bufferSize = PAULogPath->fLength + 4;
-
+	size_t bufferSize = wcslen(WCLoggingPath) + 4;
+	
 	// Adding in additional space for  "*.*"
 	WCHAR *searchPath = (WCHAR*) malloc(sizeof(WCHAR) * (bufferSize));
 
 	// WJF 7/11/16 Win-20 parameter -> global  
 	// ZRW 3/23/17 WIN-39 MAX_PATH -> sizeof(searchPath)
 	// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
-	wcscpy_s(searchPath, bufferSize, (WCHAR*) PAULogPath->fString);
+	wcscpy_s(searchPath, bufferSize, WCLoggingPath);
 	
 	// ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(searchPath)
 	// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
@@ -133,12 +141,12 @@ PA_long32 logMaintenance() {
 
 			// Delete files older than the specified number of days
 			if (qwResult > (PALNumDays * _DAY)) { // WJF 7/8/16 Win-20 30 -> lNumDays, >= -> >
-				bufferSize = PAULogPath->fLength + 1 + wcslen(ffd.cFileName);
+				bufferSize = wcslen(WCLoggingPath) + 1 + wcslen(ffd.cFileName);
 				deletePath = (WCHAR*) malloc(sizeof(WCHAR) * (bufferSize));
 												
 				// ZRW 3/23/17 WIN-39 MAX_PATH -> sizeof(deletePath)
 				// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
-				wcscpy_s(deletePath, bufferSize, (WCHAR*)PAULogPath->fString);
+				wcscpy_s(deletePath, bufferSize, WCLoggingPath);
 
 				// ZRW 4/5/17 WIN-39 MAX_PATH -> sizeof(deletePath)
 				// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
@@ -164,15 +172,15 @@ PA_long32 logOpenFile() {
 
 	PA_long32 PALReturnValue = 0;
 
-	if (PAULogPath != NULL) {
+	if (WCLoggingPath != NULL) {
 		// Adding in additional space for "Win64API_", the date, and ".log"
-		size_t bufferSize = PAULogPath->fLength + 30;
+		size_t bufferSize = wcslen(WCLoggingPath) + 30;
 	
 		logFilePath = (WCHAR*) malloc(sizeof(WCHAR) * (bufferSize));
 
 		// ZRW 3/23/17 WIN-39 strcpy -> strcpy_s 
 		// ACW 3/3/21 WIN-105 strcpy_s -> wcscpy_s
-		wcscpy_s (logFilePath, bufferSize, (WCHAR*) PAULogPath->fString);
+		wcscpy_s (logFilePath, bufferSize, WCLoggingPath);
 	
 		CreateDirectory(logFilePath, NULL);
 
@@ -211,7 +219,7 @@ PA_long32 logCloseFile() {
 
 	if (hLogFile != INVALID_HANDLE_VALUE) {
 		free(dateOpened);
-
+	
 		if (CloseHandle(hLogFile)) {
 			lReturnValue = 0;
 			bLogIsOpen = FALSE;

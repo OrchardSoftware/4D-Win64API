@@ -378,9 +378,11 @@ void sys_ShellExecute(PA_PluginParameters params)
 	palHowToShow = PA_GetLongParameter(params, 5);
 
 	// The operation is not open, explore, or print or if the file is blank.
-	if ( (wcscmp(L"open", (wchar_t*)pauOperation->fString) != 0) &&
-		 (wcscmp(L"explore", (wchar_t*)pauOperation->fString) != 0) &&
-		 (wcscmp(L"print", (wchar_t*)pauOperation->fString) != 0))
+	if (((pauOperation->fLength == 0) ||
+		((wcscmp(L"open", (wchar_t*)pauOperation->fString) != 0) &&
+		(wcscmp(L"explore", (wchar_t*)pauOperation->fString) != 0) &&
+			(wcscmp(L"print", (wchar_t*)pauOperation->fString) != 0))
+		))
 	{
 		// Mark De Wever #12225 replaced the line above
 		// JEM 3/18/21 WIN-84 Removed support for dutch language - just returning english
@@ -391,7 +393,7 @@ void sys_ShellExecute(PA_PluginParameters params)
 		// JEM 3/18/21 WIN-84 Added for clarification this case used to be part of Invalid Operation
 		PA_ReturnString(params, (PA_Unichar *) L"No File");
 	}
-	else if ((palHowToShow < 0) | (palHowToShow > 10)) // // JEM 3/18/21 WIN-84 This was just > 11.  Valid values per documentation are 0 - 10.
+	else if ((palHowToShow < 0) || (palHowToShow > 10)) // // JEM 3/18/21 WIN-84 This was just > 11.  Valid values per documentation are 0 - 10.
 	{
 		// Mark De Wever #12225 replaced the line above
 		// JEM 3/18/21 WIN-84 Removed support for dutch language - just returning english
