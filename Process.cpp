@@ -377,6 +377,15 @@ void sys_ShellExecute(PA_PluginParameters params)
 	pauDirectory = PA_GetStringParameter(params, 4);
 	palHowToShow = PA_GetLongParameter(params, 5);
 
+	// Convert the operation to lowercase
+	for (int i = 0; i < pauOperation->fLength; i++)
+	{
+		if (iswupper(pauOperation->fString[i]))
+		{
+			pauOperation->fString[i] = towlower(pauOperation->fString[i]);
+		}
+	}
+
 	// The operation is not open, explore, or print or if the file is blank.
 	if (((pauOperation->fLength == 0) ||
 		((wcscmp(L"open", (wchar_t*)pauOperation->fString) != 0) &&
