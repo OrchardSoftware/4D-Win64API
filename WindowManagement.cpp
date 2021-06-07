@@ -510,87 +510,88 @@ LRESULT APIENTRY BkgrndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	switch (uMsg)
 	{
-	case (WM_USER + 0x0030): // initial setup -- passing bitmap hndl and tileOrScale
-							 // tileOrScale = wParam; // WJF 6/30/16 Win-21 For what purpose
-		hOrigBitmap = (HBITMAP) lParam;
-		GetObject(hOrigBitmap, sizeof(BITMAP), &origBitmap);
-		hdc = GetDC(hwnd);
-		hdcMem = CreateCompatibleDC(hdc);
+		case (WM_USER + 0x0030): // initial setup -- passing bitmap hndl and tileOrScale
+								 // tileOrScale = wParam; // WJF 6/30/16 Win-21 For what purpose
+			hOrigBitmap = (HBITMAP) lParam;
+			GetObject(hOrigBitmap, sizeof(BITMAP), &origBitmap);
+			hdc = GetDC(hwnd);
+			hdcMem = CreateCompatibleDC(hdc);
 
-		switch (wParam) { // WJF 6/30/16 Win-21 tileOrScale -> wParam
-		case BM_SCALE:
-			GetClientRect(hwnd, &clientRect);
-			fullClientWidth = clientRect.right;
-			fullClientHeight = clientRect.bottom;
-			oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
-			break;
-		case BM_SCALETOMAXCLIENT:
-			fullClientWidth = GetSystemMetrics(SM_CXFULLSCREEN);
-			fullClientHeight = GetSystemMetrics(SM_CYFULLSCREEN);
-			oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
-			break;
-		case BM_TILE:
-			fullClientWidth = GetSystemMetrics(SM_CXFULLSCREEN);
-			fullClientHeight = GetSystemMetrics(SM_CYFULLSCREEN);
-			oldObject = tileImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
-			break;
-		}
-		break;
-
-	case WM_SIZE:
-
-		if (wParam == BM_SCALE) { // WJF 6/30/16 Win-21 tileOrScale -> wParam
-			cxClient = LOWORD(lParam);
-			cyClient = HIWORD(lParam);
-
-			if (((fullClientWidth != cxClient) || (fullClientHeight != cyClient))
-				&& (cxClient != 0 && cyClient != 0)) {
-				fullClientWidth = cxClient;
-				fullClientHeight = cyClient;
-				DeleteObject(SelectObject(hdcMem, oldObject));
-				oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, cxClient, cyClient);
-				InvalidateRect(hwnd, &clientRect, FALSE);
-				return 1;
+			switch (wParam) { // WJF 6/30/16 Win-21 tileOrScale -> wParam
+			case BM_SCALE:
+				GetClientRect(hwnd, &clientRect);
+				fullClientWidth = clientRect.right;
+				fullClientHeight = clientRect.bottom;
+				oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
+				break;
+			case BM_SCALETOMAXCLIENT:
+				fullClientWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+				fullClientHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+				oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
+				break;
+			case BM_TILE:
+				fullClientWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+				fullClientHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+				oldObject = tileImage(hdc, hdcMem, hOrigBitmap, fullClientWidth, fullClientHeight);
+				break;
 			}
-		}
+			break;
 
-	case WM_PAINT:
+		case WM_SIZE:
 
-		GetUpdateRect(hwnd, &rect, TRUE);
-		cxClient = rect.right;
-		cyClient = rect.bottom;
+			if (wParam == BM_SCALE) { // WJF 6/30/16 Win-21 tileOrScale -> wParam
+				cxClient = LOWORD(lParam);
+				cyClient = HIWORD(lParam);
 
-		BeginPaint(hwnd, &ps);
-
-		if (cyClient < fullClientHeight && cxClient < fullClientWidth)
-			BitBlt(hdc, 0, 0, cxClient, cyClient, hdcMem, 0, 0, SRCCOPY);
-		else
-			for (y = 0; y < cyClient; y += fullClientHeight)
-				for (x = 0; x < cxClient; x += fullClientWidth)
-				{
-					BitBlt(hdc, x, y, fullClientWidth, fullClientHeight, hdcMem, 0, 0, SRCCOPY);
+				if (((fullClientWidth != cxClient) || (fullClientHeight != cyClient))
+					&& (cxClient != 0 && cyClient != 0)) {
+					fullClientWidth = cxClient;
+					fullClientHeight = cyClient;
+					DeleteObject(SelectObject(hdcMem, oldObject));
+					oldObject = scaleImage(hdc, hdcMem, hOrigBitmap, cxClient, cyClient);
+					InvalidateRect(hwnd, &clientRect, FALSE);
+					return 1;
 				}
+			}
+			break; // JEM 6/7/21 H-14432 Missing break caused issues with MDI window passing resize event through.
 
-		EndPaint(hwnd, &ps);
+		case WM_PAINT:
 
-		return 1; // return immediately - don't let orig window proc repaint
+			GetUpdateRect(hwnd, &rect, TRUE);
+			cxClient = rect.right;
+			cyClient = rect.bottom;
 
-	case (WM_USER + 0x0031):
+			BeginPaint(hwnd, &ps);
 
-		ReleaseDC(hwnd, hdc);
-		DeleteObject(SelectObject(hdcMem, oldObject));
-		DeleteDC(hdcMem);
-		DeleteObject(hOrigBitmap);
-		// tileOrScale = 0; // WJF 6/30/16 Win-21 Removed
-		fullClientWidth = 0;
-		fullClientHeight = 0;
-		cxClient = 0;
-		cyClient = 0;
-		// REB 3/18/11 #25290
-		SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)g_wpOrigMDIProc);
-		//SetWindowLong(hwnd, GWL_WNDPROC, (LONG) g_wpOrigMDIProc);
+			if (cyClient < fullClientHeight && cxClient < fullClientWidth)
+				BitBlt(hdc, 0, 0, cxClient, cyClient, hdcMem, 0, 0, SRCCOPY);
+			else
+				for (y = 0; y < cyClient; y += fullClientHeight)
+					for (x = 0; x < cxClient; x += fullClientWidth)
+					{
+						BitBlt(hdc, x, y, fullClientWidth, fullClientHeight, hdcMem, 0, 0, SRCCOPY);
+					}
 
-		break;
+			EndPaint(hwnd, &ps);
+
+			return 1; // return immediately - don't let orig window proc repaint
+
+		case (WM_USER + 0x0031):
+
+			ReleaseDC(hwnd, hdc);
+			DeleteObject(SelectObject(hdcMem, oldObject));
+			DeleteDC(hdcMem);
+			DeleteObject(hOrigBitmap);
+			// tileOrScale = 0; // WJF 6/30/16 Win-21 Removed
+			fullClientWidth = 0;
+			fullClientHeight = 0;
+			cxClient = 0;
+			cyClient = 0;
+			// REB 3/18/11 #25290
+			SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)g_wpOrigMDIProc);
+			//SetWindowLong(hwnd, GWL_WNDPROC, (LONG) g_wpOrigMDIProc);
+
+			break;
 	}
 
 	return CallWindowProc(g_wpOrigMDIProc, hwnd, uMsg, wParam, lParam);
