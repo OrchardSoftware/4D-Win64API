@@ -12,7 +12,7 @@ Win64API has been tested with 4D v18. If you need to support older versions of 4
 
 Orchard Software does not provide technical support for this plugin, but we do appreciate hearing about any problems you discover. To report a problem, send an email to [Drew Waddell](mailto:dwaddell@orchardsoft.com).
 
-Copyright &copy; 2020 Orchard Software Corporation
+Copyright &copy; 2022 Orchard Software Corporation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
