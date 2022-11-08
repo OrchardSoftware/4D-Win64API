@@ -61,6 +61,7 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 	PALReturnValue = 1;
 
+	// ACW 11/8/22 WIN-123 25 -> 26
 	bufferSize = (25 + wcslen(wc4DXPath));
 	WCPluginPath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
 
@@ -481,7 +482,8 @@ long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL Get64, BOOL ShowUI, 
 	DWORD dwExitCode = 0;
 	BOOL bSuccess = FALSE;
 	
-	bufferSize = (25 + wcslen(wc4DXPath));
+	// ACW 11/8/22 WIN-123 25 -> 26
+	bufferSize = (26 + wcslen(wc4DXPath));
 	WCPluginPath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
 
 	wcscpy_s(WCPluginPath, bufferSize, wc4DXPath);
