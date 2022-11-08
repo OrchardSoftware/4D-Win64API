@@ -11,7 +11,7 @@ C_BOOLEAN:C305($1;$bMemoryTest)
 
 TRACE:C157
 
-C_LONGINT:C283($x;$lRepeatCount)
+C_LONGINT:C283($x;$lRepeatCount;$lErr;$i)
 C_TEXT:C284($tStnIn;$tStdOut;$tStdErr;$tPath)
 
 If ($1)

@@ -93,7 +93,7 @@
       "theme": "Win64API Commands"
     },
     {
-      "syntax": "TWAIN_GetSources(&Y;&L;&L):L",
+      "syntax": "TWAIN_GetSources(&Y;&L;&L;&L):L",
       "theme": "Win64API Commands"
     },
     {
@@ -101,7 +101,7 @@
       "theme": "Win64API Commands"
     },
     {
-      "syntax": "TWAIN_AcquireImage(&L;&Y;&L;&L;&L):L",
+      "syntax": "TWAIN_AcquireImage(&L;&Y;&L;&L;&L;&L):L",
       "theme": "Win64API Commands"
     },
     {

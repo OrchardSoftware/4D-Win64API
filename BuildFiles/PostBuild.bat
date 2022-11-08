@@ -17,6 +17,9 @@ echo F|xcopy /i /y %2BuildFiles\constants.xlf %1..\Resources\constants.xlf
 :: Copy Orchard Utilities
 echo F|xcopy /i /y %2BuildFiles\Orchard_Utilities.exe %1Orchard_Utilities.exe
 
+:: Copy Orchard Utilities 32-bit
+echo F|xcopy /i /y %2BuildFiles\Orchard_Utilities_32.exe %1Orchard_Utilities_32.exe
+
 :: Copy TWAINDSM.dll
 echo F|xcopy /i /y %2BuildFiles\TWAINDSM.dll %1TWAINDSM.dll
 

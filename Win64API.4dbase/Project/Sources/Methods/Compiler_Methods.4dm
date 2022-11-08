@@ -6,11 +6,15 @@ C_LONGINT:C283(Win64API_main ;$1)
 
 C_BOOLEAN:C305(win_71 ;$1)
 
+C_BOOLEAN:C305(win_77 ;$1)
+
 C_BOOLEAN:C305(win_78 ;$1)
 
 C_BOOLEAN:C305(win_80 ;$1)
 
 C_BOOLEAN:C305(win_87 ;$1)
+
+C_BOOLEAN:C305(win_96 ;$1)
 
 C_BOOLEAN:C305(win_97 ;$1)
 
