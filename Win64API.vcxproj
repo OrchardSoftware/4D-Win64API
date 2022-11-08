@@ -270,6 +270,7 @@
     <None Include="BuildFiles\LICENSE" />
     <None Include="BuildFiles\manifest.json" />
     <None Include="BuildFiles\Orchard_Utilities.exe" />
+    <None Include="BuildFiles\Orchard_Utilities_32.exe" />
     <None Include="BuildFiles\PostBuild.bat" />
     <None Include="BuildFiles\TWAINDSM.dll" />
   </ItemGroup>

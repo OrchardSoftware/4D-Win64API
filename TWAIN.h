@@ -42,5 +42,7 @@ void TWAIN_AcquireImage(PA_PluginParameters params); // REB 6/23/09 #14151
 unsigned __stdcall TWAIN_GetImage(void *);
 
 // WJF 9/10/15 #43727
-long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL ShowUI, BOOL IsWIA, BOOL GetMultiple); // WJF 9/21/15 #43940 Added IsWIA and GetMultiple
+// WJF 9/21/15 #43940 Added IsWIA and GetMultiple
+// ACW 11/8/22 WIN-123 Added Get64
+long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL Get64, BOOL ShowUI, BOOL IsWIA, BOOL GetMultiple);
 

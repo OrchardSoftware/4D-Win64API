@@ -34,7 +34,7 @@ extern "C" __declspec(dllexport) {
 void TWAIN_GetSources(PA_PluginParameters params)
 {
 	PA_Variable PAVSources;
-	PA_long32 PALReturnValue = 0, PALDoNotAddSuffix, PALFlags;
+	PA_long32 PALReturnValue = 0, PALDoNotAddSuffix, PALFlags, PAL32;
 	
 	size_t bufferSize;
 	WCHAR *WCPluginPath, *WCToCharInBuffer;
@@ -57,8 +57,11 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 	PALFlags = PA_GetLongParameter(params, 3); // SDL 10/3/17 WIN-51 
 
+	PAL32 = PA_GetLongParameter(params, 3); // ACW 11/8/22 WIN-123
+
 	PALReturnValue = 1;
 
+	// ACW 11/8/22 WIN-123 25 -> 26
 	bufferSize = (25 + wcslen(wc4DXPath));
 	WCPluginPath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
 
@@ -68,8 +71,14 @@ void TWAIN_GetSources(PA_PluginParameters params)
 	if (WCToCharInBuffer != NULL) {
 		WCToCharInBuffer[0] = NULL;
 	}
-		
-	wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
+	
+	// ACW 11/8/22 WIN-123
+	if (PAL32) {
+		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities_32.exe");
+	}
+	else {
+		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
+	}
 
 	GetTempPath(MAX_PATH, filePath);
 	wcscat_s(filePath, MAX_PATH, L"twainSources.txt");
@@ -246,7 +255,7 @@ void TWAIN_SetSource(PA_PluginParameters params)
 
 void TWAIN_AcquireImage(PA_PluginParameters params)
 {
-	PA_long32 PALReturnValue = 0, PALShowDialog, PALGetMultiple, PALwiaMode;
+	PA_long32 PALReturnValue = 0, PALShowDialog, PALGetMultiple, PALwiaMode, PAL32;
 	PA_Variable PAVBlobArray, PAVTWAINImageBlob;
 	
 	FILE *TWAINImageFilePointer;
@@ -274,6 +283,8 @@ void TWAIN_AcquireImage(PA_PluginParameters params)
 
 	PALwiaMode = PA_GetLongParameter(params, 4); // WJF 9/21/15 #43940
 
+	PAL32 = PA_GetLongParameter(params, 5); // ACW 11/8/22 WIN-123
+
 	GetTempPath(MAX_PATH, fileName);
 	wcscat_s(fileName, MAX_PATH, L"TWNIMG.bmp");
 
@@ -291,7 +302,15 @@ void TWAIN_AcquireImage(PA_PluginParameters params)
 	// TWAINCapture.DIBHandle = DIBHandle; // WJF 9/10/15 #43727 Removed
 	TWAINCapture.done = FALSE;
 
-	TWAINCapture.get64 = 1; // WJF 9/10/15 #43727 // ACW 4/5/21 WIN-119 Hard-coded to 1 now
+	// WJF 9/10/15 #43727
+	// ACW 4/5/21 WIN-119 Hard-coded to 1 now
+	// ACW 11/8/22 WIN-123 Accept 32-bit drivers
+	if (PAL32) {
+		TWAINCapture.get64 = 0; 
+	}
+	else {
+		TWAINCapture.get64 = 1;
+	}	
 
 	TWAINCapture.getMultiple = PALGetMultiple; // WJF 9/21/15 #43940
 
@@ -407,7 +426,8 @@ unsigned __stdcall TWAIN_GetImage(void *arg)
 	//TWAIN_UnloadSourceManager();  // REB 2/26/13 #35165 We have to reset our source before trying to acquire an image.
 	//TWAINCapture->DIBHandle = TWAIN_AcquireNative(NULL, TWAIN_ANYTYPE, &returnValue);
 
-	TWAINCapture->returnValue = OrchTwain_Get(TWAINCapture->filePath, TWAINCapture->showUI, TWAINCapture->wiaMode, TWAINCapture->getMultiple); // WJF 9/10/15 #43727 // WJF 9/21/15 #43940
+	// ACW 11/8/22 WIN-123 Added TWAINCapture->get64
+	TWAINCapture->returnValue = OrchTwain_Get(TWAINCapture->filePath, TWAINCapture->get64, TWAINCapture->showUI, TWAINCapture->wiaMode, TWAINCapture->getMultiple); // WJF 9/10/15 #43727 // WJF 9/21/15 #43940
 
 	if (TWAINCapture->getMultiple) {
 		while (bContinue) {
@@ -450,7 +470,7 @@ unsigned __stdcall TWAIN_GetImage(void *arg)
 //  COMMENTS:
 //
 //	DATE:		WJF 9/10/15 #43727
-long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL ShowUI, BOOL IsWIA, BOOL GetMultiple) {
+long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL Get64, BOOL ShowUI, BOOL IsWIA, BOOL GetMultiple) {
 	long returnValue = 1;
 	WCHAR *WCPluginPath, *WCToCharInBuffer;
 	size_t bufferSize;
@@ -462,7 +482,8 @@ long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL ShowUI, BOOL IsWIA, 
 	DWORD dwExitCode = 0;
 	BOOL bSuccess = FALSE;
 	
-	bufferSize = (25 + wcslen(wc4DXPath));
+	// ACW 11/8/22 WIN-123 25 -> 26
+	bufferSize = (26 + wcslen(wc4DXPath));
 	WCPluginPath = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
 
 	wcscpy_s(WCPluginPath, bufferSize, wc4DXPath);
@@ -472,7 +493,13 @@ long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL ShowUI, BOOL IsWIA, 
 		WCToCharInBuffer[0] = NULL;
 	}
 
-	wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
+	// ACW 11/8/22 WIN-123 Added support for 32-bit
+	if (Get64) {
+		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
+	}
+	else {
+		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities_32.exe");
+	}
 
 	wcscpy_s(wcTWAINGetSource, MAX_PATH, wcTwainSource);
 
