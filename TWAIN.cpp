@@ -57,7 +57,7 @@ void TWAIN_GetSources(PA_PluginParameters params)
 
 	PALFlags = PA_GetLongParameter(params, 3); // SDL 10/3/17 WIN-51 
 
-	PAL32 = PA_GetLongParameter(params, 3); // ACW 11/8/22 WIN-123
+	PAL32 = PA_GetLongParameter(params, 4); // ACW 11/8/22 WIN-123 // ACW 8/23/23 WIN-124 3 -> 4
 
 	PALReturnValue = 1;
 
@@ -237,13 +237,19 @@ void TWAIN_SetSource(PA_PluginParameters params)
 		wcTwainSource = NULL;
 	}
 		
-	// WJF 7/13/16 Win-21 Removed typecasting on malloc to follow C best practices
-	size_t bufferSize = (1 + PAUSourceName->fLength);
-	wcTwainSource = (WCHAR*) malloc(sizeof(WCHAR) * bufferSize);
-		
-	// WJF 9/29/15 Added a check to see if it was actually allocated and a new error code
-	if (wcTwainSource) {
-		wcscpy_s(wcTwainSource, bufferSize, (WCHAR*) PAUSourceName->fString);
+	// ACW 8/23/23 WIN-124 Return an error if we didn't receive a source
+	if (PAUSourceName->fLength > 0) {
+		// WJF 7/13/16 Win-21 Removed typecasting on malloc to follow C best practices
+		size_t bufferSize = (1 + PAUSourceName->fLength);
+		wcTwainSource = (WCHAR*)malloc(sizeof(WCHAR) * bufferSize);
+
+		// WJF 9/29/15 Added a check to see if it was actually allocated and a new error code
+		if (wcTwainSource) {
+			wcscpy_s(wcTwainSource, bufferSize, (WCHAR*)PAUSourceName->fString);
+		}
+		else {
+			PALReturnValue = 0;
+		}
 	}
 	else {
 		PALReturnValue = 0;
