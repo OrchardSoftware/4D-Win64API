@@ -273,6 +273,7 @@
     <None Include="BuildFiles\Orchard_Utilities_32.exe" />
     <None Include="BuildFiles\PostBuild.bat" />
     <None Include="BuildFiles\TWAINDSM.dll" />
+    <None Include="BuildFiles\TWAIN_32\TWAINDSM.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -74,7 +74,7 @@ void TWAIN_GetSources(PA_PluginParameters params)
 	
 	// ACW 11/8/22 WIN-123
 	if (PAL32) {
-		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities_32.exe");
+		wcscat_s(WCPluginPath, bufferSize, L"\\TWAIN_32\\Orchard_Utilities_32.exe");
 	}
 	else {
 		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
@@ -504,7 +504,7 @@ long __stdcall OrchTwain_Get(const wchar_t * filePath, BOOL Get64, BOOL ShowUI, 
 		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities.exe");
 	}
 	else {
-		wcscat_s(WCPluginPath, bufferSize, L"\\Orchard_Utilities_32.exe");
+		wcscat_s(WCPluginPath, bufferSize, L"\\TWAIN_32\\Orchard_Utilities_32.exe");
 	}
 
 	wcscpy_s(wcTWAINGetSource, MAX_PATH, wcTwainSource);

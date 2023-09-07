@@ -65,7 +65,10 @@
       <Filter>Resources</Filter>
     </None>
     <None Include="BuildFiles\Orchard_Utilities_32.exe">
-      <Filter>Resources</Filter>
+      <Filter>Resources\TWAIN_32</Filter>
+    </None>
+    <None Include="BuildFiles\TWAIN_32\TWAINDSM.dll">
+      <Filter>Resources\TWAIN_32</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +77,9 @@
     </Filter>
     <Filter Include="SDK">
       <UniqueIdentifier>{7ec0b26f-efd0-4b46-a6e2-7c3c42368a9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\TWAIN_32">
+      <UniqueIdentifier>{905e27b2-e68a-4e79-b5f8-f3e6fb935167}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
